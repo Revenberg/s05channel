@@ -11,7 +11,7 @@
 [![Discord][discord-shield]][discord]
 [![Community Forum][forum-shield]][forum]
 
-_Integration to integrate with [integration_blueprint][integration_blueprint]._
+_Integration to integrate with [s05channel][integration_blueprint]._
 
 **This integration will set up the following platforms.**
 
