@@ -1,7 +1,5 @@
-"""Config flow for Hello World integration."""
 from __future__ import annotations
-
-import logging
+import logging 
 from typing import Any
 
 import voluptuous as vol
@@ -10,7 +8,8 @@ from homeassistant import config_entries, exceptions
 from homeassistant.core import HomeAssistant
 
 #from homeassistant.const import CONF_ACCESS_TOKEN, CONF_NAME, CONF_PATH, CONF_URL, CONF_TYPE,     
-from homeassistant.const import CONF_DEVICE,    CONF_DEVICE_ID,    CONF_DEVICES, CONF_HOST, CONF_PORT
+from homeassistant.const import CONF_DEVICE
+#,    CONF_DEVICE_ID,    CONF_DEVICES, CONF_HOST, CONF_PORT
 from .const import DOMAIN, CONF_MANUAL_PATH  # pylint:disable=unused-import
 from .hub import Hub
 import serial
@@ -58,6 +57,7 @@ async def validate_input_title(hass: HomeAssistant, data: dict) -> dict[str, Any
     return {"title": data["host"]}
 
 async def validate_input_device(hass: HomeAssistant, data: dict) -> dict[str, Any]:
+    '''Validate the user input device to connect.'''
     if len(data[CONF_DEVICE ]) < 3:
         raise InvalidHost
 

@@ -8,7 +8,7 @@ from . import hub
 from .const import DOMAIN
 #, CONF_SERIAL
 
-import serial
+#import serial
 
 import logging
 _LOGGER = logging.getLogger(__name__)
