@@ -5,7 +5,8 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
 from . import hub
-from .const import DOMAIN, CONF_SERIAL
+from .const import DOMAIN
+#, CONF_SERIAL
 
 import serial
 

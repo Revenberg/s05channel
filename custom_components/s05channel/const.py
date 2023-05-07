@@ -7,6 +7,6 @@ DOMAIN = "s05channel"
 CONF_PATH = "s0Path"
 
 CONF_MANUAL_PATH = "Enter Manually"
-CONF_SERIAL = "serial"
+#CONF_SERIAL = "serial"
 
 CONF_SCAN_INTERVAL = 60
