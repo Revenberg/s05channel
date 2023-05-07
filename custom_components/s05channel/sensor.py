@@ -304,6 +304,7 @@ class energySensor1(Entity):
 # have been overridden.
 class SensorBase(Entity):
     """Base representation of a Hello World Sensor."""
+
     should_poll = False
 
     def __init__(self, roller):
@@ -353,7 +354,7 @@ class EnergySensor(SensorBase):
     _attr_unit_of_measurement = ENERGY_KILO_WATT_HOUR
 
     def __init__(self, roller):
-        """ As per the sensor, this must be a unique value within this domain. This is done by using the device ID, and appending "_ENERGY". """
+        """As per the sensor, this must be a unique value within this domain. This is done by using the device ID, and appending "_ENERGY"."""
         super().__init__(roller)
         _LOGGER.debug("__init__")
         self._attr_unique_id = f"{self._roller.roller_id}_energy"
@@ -421,7 +422,7 @@ class EnergySensor(SensorBase):
     def unit_of_measurement(self):
         """Return the unit of measurement of this entity."""
 
-        return "W"
+        return 'W'
 
     @property
     def name(self):
