@@ -1,17 +1,17 @@
 {
   "domain": "s05channel",
   "name": "s0 SOS 5 channel",
+  "codeowners": ["@sander"],
   "config_flow": true,
+  "dependencies": [],
   "documentation": "https://github.com/Revenberg/s05channel",
+  "homekit": {},
+  "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/Revenberg/s05channel/issues",
   "requirements": [],
   "ssdp": [],
-  "zeroconf": [],
-  "homekit": {},
-  "dependencies": [],
-  "codeowners": ["@sander"],
-  "iot_class": "cloud_polling",
-  "version": "0.0.2"
+  "version": "0.0.2",
+  "zeroconf": []
 }
 
 
