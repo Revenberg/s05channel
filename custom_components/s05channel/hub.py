@@ -11,11 +11,10 @@ import random
 import serial
 import datetime
 
+from homeassistant.core import HomeAssistant
 import logging
 _LOGGER = logging.getLogger(__name__)
 _LOGGER.setLevel(logging.DEBUG)
-
-from homeassistant.core import HomeAssistant
 
 class Hub:
     """Hub for s0 5 channel."""
@@ -44,7 +43,7 @@ class Hub:
         self.online = True
 
     def get_device(self) -> str:
-        """ get device."""
+        """Get device."""
         _LOGGER.debug("get_device" )
         _LOGGER.debug( self._device )
         return self._device
@@ -156,8 +155,7 @@ class Roller:
         return self._current_position
 
     async def set_position(self, position: int) -> None:
-        """
-        Set dummy cover to the given position.
+        """Set dummy cover to the given position.
 
         State is announced a random number of seconds later.
         """

@@ -24,7 +24,7 @@ from homeassistant import config_entries, core
 #from homeassistant.helpers.entity import Entity
 from datetime import timedelta
 
-from .hub import Hub
+#from .hub import Hub
 
 from .const import DOMAIN, CONF_SCAN_INTERVAL
 #, CONF_SERIAL
@@ -36,7 +36,7 @@ _LOGGER = logging.getLogger(__name__)
 _LOGGER.setLevel(logging.DEBUG)
 
 ICON = "mdi:power-plug"
-SCAN_INTERVAL = timedelta(seconds=60)
+#SCAN_INTERVAL = timedelta(seconds=60)
 _LOGGER.debug( __name__ )
 #
 #    _LOGGER.debug(  async_add_entities )
@@ -128,6 +128,7 @@ async def async_setup_entry(hass: core.HomeAssistant, config_entry: config_entri
     async_add_entities([energySensor1(hub._instrument, hub._name, 60)], True)
 
 class energySensor1(Entity):
+    """energySensor1."""
     _attr_unit_of_measurement = ENERGY_KILO_WATT_HOUR
     device_clasync_added_to_hassass = DEVICE_CLASS_ENERGY
     p1 = 0
@@ -137,6 +138,7 @@ class energySensor1(Entity):
     p5 = 0
 
     def __init__(self, instrument, name, scan_interval):
+        """init."""
         _LOGGER.debug("creating Energy sensor")
         self._instrument = instrument
         self._scan_interval = scan_interval
@@ -145,14 +147,17 @@ class energySensor1(Entity):
         self._device_state_attributes = {}
 
     def getValueLong(self, addr, numberOfDecimals=0, functioncode=0, signed=False):
+        """Get value long."""
         rc = self._instrument.read_long(addr, functioncode=functioncode, signed=signed)
         return rc
 
     def getValueRegister(self, addr, numberOfDecimals=0, functioncode=0, signed=False):
+        """Get value register."""
         rc = self._instrument.read_register(addr, numberOfDecimals=numberOfDecimals, functioncode=functioncode, signed=signed)
         return rc
 
     def round(self, floatval):
+        """Get value round."""        
         return round(floatval, 2)
 
     @property
@@ -166,12 +171,13 @@ class energySensor1(Entity):
         return self._state
 
     async def async_added_to_hass(self):
+        """async_added_to_hass."""
         _LOGGER.debug("added to hass, starting loop")
         loop = self.hass.loop
         task = loop.create_task(self.energy_loop())
 
     async def energy_loop(self):
-        _LOGGER.debug("energy_loop")
+        """Energy loop"""
         while True:
             try:
                 _LOGGER.debug("=============================================================")
@@ -282,6 +288,7 @@ class energySensor1(Entity):
 
     @property
     def unique_id(self):
+        """Get uniq id."""
         return self._name
 
 
@@ -358,10 +365,11 @@ class EnergySensor(SensorBase):
     async def async_added_to_hass(self):
         _LOGGER.debug("added to hass, starting loop")
         loop = self.hass.loop
-        task = loop.create_task(self.s05channel_loop())
+        #task = 
+        loop.create_task(self.s05channel_loop())
 
     async def s05channel_loop(self):
-        _LOGGER.debug("s05channel_loop")
+        """s05channel_loop."""
 
         while True:
 #            values['test'] = 'test'
@@ -392,7 +400,7 @@ class EnergySensor(SensorBase):
     # the ENERGY level as a percentage (between 0 and 100)
     @property
     def state(self):
-        _LOGGER.debug("state")
+        """state."""
         """Return the state of the sensor."""
         return self._roller.energy
 
@@ -446,7 +454,7 @@ class BatterySensor(SensorBase):
     _attr_unit_of_measurement = PERCENTAGE
 
     def __init__(self, roller):
-
+        """init"""
         super().__init__(roller)
 
         # As per the sensor, this must be a unique value within this domain. This is done

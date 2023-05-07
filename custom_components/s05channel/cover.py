@@ -28,7 +28,7 @@ async def async_setup_entry(
     """Add cover for passed config_entry in HA."""
     # The hub is loaded from the associated hass.data entry that was created in the
     # __init__.async_setup_entry function
-    # hub = 
+    # hub =
     hass.data[DOMAIN][config_entry.entry_id]
 
     # Add all entities to HA
