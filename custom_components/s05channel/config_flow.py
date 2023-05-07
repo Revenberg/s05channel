@@ -1,4 +1,4 @@
-"""s0 5 channels"""
+"""s0 5 channels."""
 from __future__ import annotations
 import logging
 from typing import Any
@@ -8,7 +8,7 @@ import voluptuous as vol
 from homeassistant import config_entries, exceptions
 from homeassistant.core import HomeAssistant
 
-#from homeassistant.const import CONF_ACCESS_TOKEN, CONF_NAME, CONF_PATH, CONF_URL, CONF_TYPE,     
+#from homeassistant.const import CONF_ACCESS_TOKEN, CONF_NAME, CONF_PATH, CONF_URL, CONF_TYPE,
 from homeassistant.const import CONF_DEVICE
 #,    CONF_DEVICE_ID,    CONF_DEVICES, CONF_HOST, CONF_PORT
 from .const import DOMAIN, CONF_MANUAL_PATH  # pylint:disable=unused-import
