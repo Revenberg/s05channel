@@ -14,9 +14,9 @@ from homeassistant.const import (
     DEVICE_CLASS_ENERGY,
     DEVICE_CLASS_ILLUMINANCE,
     ENERGY_KILO_WATT_HOUR,
-    PERCENTAGE,
     CONF_DEVICE,
 )
+#    PERCENTAGE,
 #    ATTR_VOLTAGE,
 from homeassistant.helpers.entity import Entity
 from homeassistant import config_entries, core
@@ -176,7 +176,7 @@ class energySensor1(Entity):
         """async_added_to_hass."""
         _LOGGER.debug("added to hass, starting loop")
         loop = self.hass.loop
-        #task = 
+        #task =
         loop.create_task(self.energy_loop())
 
     async def energy_loop(self):
@@ -278,13 +278,13 @@ class energySensor1(Entity):
     @property
     def should_poll(self):
         """Return the polling state."""
-        
+
         return False
 
     @property
     def icon(self):
         """Return the icon to use in the frontend."""
-        
+
         return ICON
 
 #    @property
@@ -295,7 +295,7 @@ class energySensor1(Entity):
     @property
     def unique_id(self):
         """Get uniq id."""
-        
+
         return self._name
 
 
@@ -308,7 +308,7 @@ class SensorBase(Entity):
 
     def __init__(self, roller):
         """Initialize the sensor."""
-        
+
         _LOGGER.debug("SensorBase")
         self._roller = roller
 
@@ -353,8 +353,7 @@ class EnergySensor(SensorBase):
     _attr_unit_of_measurement = ENERGY_KILO_WATT_HOUR
 
     def __init__(self, roller):
-        # As per the sensor, this must be a unique value within this domain. This is done
-        # by using the device ID, and appending "_ENERGY"
+        """ As per the sensor, this must be a unique value within this domain. This is done by using the device ID, and appending "_ENERGY". """
         super().__init__(roller)
         _LOGGER.debug("__init__")
         self._attr_unique_id = f"{self._roller.roller_id}_energy"
@@ -421,6 +420,7 @@ class EnergySensor(SensorBase):
     @property
     def unit_of_measurement(self):
         """Return the unit of measurement of this entity."""
+
         return "W"
 
     @property
@@ -446,7 +446,7 @@ class EnergySensor(SensorBase):
 
     @property
     def unique_id(self):
-        """unique id."""
+        """Unique id."""
         return self._attr_name
 
 class BatterySensor(SensorBase):
