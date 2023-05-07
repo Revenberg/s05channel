@@ -136,7 +136,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_setup_serial(
         self, user_input: dict[str, Any] | None = None
-    ) -> data_entry_flow.FlowResult:
+    ):# -> data_entry_flow.FlowResult:
         """Step when setting up serial configuration."""
         errors: dict[str, str] = {}
         _LOGGER.debug( user_input )
@@ -216,7 +216,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_setup_serial_manual_path(
         self, user_input: dict[str, Any] | None = None
-    ) -> data_entry_flow.FlowResult:
+    ): # -> data_entry_flow.FlowResult:
         """Select path manually."""
         errors: dict[str, str] = {}
 

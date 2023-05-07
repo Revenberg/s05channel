@@ -44,6 +44,7 @@ class Hub:
         self.online = True
 
     def get_device(self) -> str:
+        """ get device."""
         _LOGGER.debug("get_device" )
         _LOGGER.debug( self._device )
         return self._device
@@ -54,18 +55,22 @@ class Hub:
         return self._id
 
     def connect(self):
+        """Connect to device."""
         if not self._instrument.isOpen():
             self._instrument.open()
             self._instrument.setRTS(False)
 
     def disconnect(self):
+        """Disconnect device."""
         if self._instrument.isOpen():
             self._instrument.close()
 
     def connected(self):
+        """Is connect to device?"""
         return self._instrument.isOpen()
 
     def get_value(self, id: int) -> float:
+          """Get data."""
           now = datetime.datetime.now()
           current = (now.hour * 100) +  now.minute
           if ( self._lastupdate != current):

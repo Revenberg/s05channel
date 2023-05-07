@@ -28,7 +28,8 @@ async def async_setup_entry(
     """Add cover for passed config_entry in HA."""
     # The hub is loaded from the associated hass.data entry that was created in the
     # __init__.async_setup_entry function
-    hub = hass.data[DOMAIN][config_entry.entry_id]
+    # hub = 
+    hass.data[DOMAIN][config_entry.entry_id]
 
     # Add all entities to HA
 #    async_add_entities(HelloWorldCover(roller) for roller in hub.rollers)
@@ -99,17 +100,17 @@ class HelloWorldCover(CoverEntity):
     # refreshed by HA from it's internal cache.
     # For more information see:
     # https://developers.home-assistant.io/docs/device_registry_index/#device-properties
-    @property
-    def device_info(self) -> DeviceInfo:
-        """Information about this entity/device."""
-        return {
-            "identifiers": {(DOMAIN, self._roller.roller_id)},
-            # If desired, the name for the device could be different to the entity
-            "name": self.name,
-            "sw_version": self._roller.firmware_version,
-            "model": self._roller.model,
-            "manufacturer": self._roller.hub.manufacturer,
-        }
+#    @property
+#    def device_info(self) -> DeviceInfo:
+#        """Information about this entity/device."""
+#        return {
+#            "identifiers": {(DOMAIN, self._roller.roller_id)},
+#            # If desired, the name for the device could be different to the entity
+#            "name": self.name,
+#            "sw_version": self._roller.firmware_version,
+#            "model": self._roller.model,
+#            "manufacturer": self._roller.hub.manufacturer,
+#        }
 
     # This property is important to let HA know if this entity is online or not.
     # If an entity is offline (return False), the UI will refelect this.
