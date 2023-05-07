@@ -1,6 +1,6 @@
 {
-    "name": "s05channel",
-    "documentation": "s0 5 channels",
+    "name": "s0 SOS 5 channel",
+    "documentation": "https://github.com/Revenberg/s05channel",
     "filename": "s05channel.zip",
     "hide_default_branch": true,
     "homeassistant": "2023.3.0",

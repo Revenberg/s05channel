@@ -2,7 +2,7 @@
   "domain": "s05channel",
   "name": "s0 SOS 5 channel",
   "config_flow": true,
-  "documentation": "https://",
+  "documentation": "https://github.com/Revenberg/s05channel",
   "requirements": [],
   "ssdp": [],
   "zeroconf": [],
