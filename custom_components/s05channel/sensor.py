@@ -7,12 +7,9 @@
 # battery), the unit_of_measurement should match what's expected.
 import random
 import asyncio
-import serial
-
-values = {}
+#import serial
 
 from homeassistant.const import (
-    ATTR_VOLTAGE,
     DEVICE_CLASS_BATTERY,
     DEVICE_CLASS_ENERGY,
     DEVICE_CLASS_ILLUMINANCE,
@@ -20,16 +17,21 @@ from homeassistant.const import (
     PERCENTAGE,
     CONF_DEVICE,
 )
+#    ATTR_VOLTAGE,
 from homeassistant.helpers.entity import Entity
 from homeassistant import config_entries, core
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.helpers.entity import Entity
+#from homeassistant.helpers.aiohttp_client import async_get_clientsession
+#from homeassistant.helpers.entity import Entity
 from datetime import timedelta
 
 from .hub import Hub
 
-from .const import DOMAIN, CONF_SCAN_INTERVAL, CONF_SERIAL
+from .const import DOMAIN, CONF_SCAN_INTERVAL
+#, CONF_SERIAL
 import logging
+
+values = {}
+
 _LOGGER = logging.getLogger(__name__)
 _LOGGER.setLevel(logging.DEBUG)
 
@@ -56,7 +58,7 @@ async def async_setup_entry(hass: core.HomeAssistant, config_entry: config_entri
     """Add sensors for passed config_entry in HA."""
     _LOGGER.debug("async_setup_entry")
     hub = hass.data[DOMAIN][config_entry.entry_id]
-    
+
 #    _LOGGER.debug("---------------------------------------------------")
 #    _LOGGER.debug("---------------------------------------------------")
 #    _LOGGER.debug("---------------------------------------------------")
@@ -248,7 +250,7 @@ class energySensor1(Entity):
             except Exception as e:
                 self.status = 3
                 _LOGGER.error(f'exception: {e}')
-                print(traceback.format_exc())
+                #print(traceback.format_exc())
                 values['_state'] = self._state
                 self._device_state_attributes = values
 
@@ -378,7 +380,7 @@ class EnergySensor(SensorBase):
             except Exception as e:
                 self.status = 7
                 _LOGGER.error(f'exception: {e}')
-                print(traceback.format_exc())
+                #print(traceback.format_exc())
                 values['_state'] = self._state
                 self._device_state_attributes = values
 

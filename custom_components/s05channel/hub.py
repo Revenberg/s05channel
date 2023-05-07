@@ -78,7 +78,7 @@ class Hub:
               line = self._instrument.readline()
             except Exception as e:
               _LOGGER.error(f'exception: {e}')
-              print(traceback.format_exc())
+              #print(traceback.format_exc())
             #_LOGGER.debug("==================== line =========================================")
             _LOGGER.info(line)
             #_LOGGER.debug("=============================================================")
@@ -175,13 +175,13 @@ class Roller:
         self.moving = 0
         await self.publish_updates()
 
-    def register_callback(self, callback: Callable[[], None]) -> None:
-        """Register callback, called when Roller changes state."""
-        self._callbacks.add(callback)
+#    def register_callback(self, callback: Callable[[], None]) -> None:
+#        """Register callback, called when Roller changes state."""
+#        self._callbacks.add(callback)
 
-    def remove_callback(self, callback: Callable[[], None]) -> None:
-        """Remove previously registered callback."""
-        self._callbacks.discard(callback)
+#    def remove_callback(self, callback: Callable[[], None]) -> None:
+#        """Remove previously registered callback."""
+#        self._callbacks.discard(callback)
 
     # In a real implementation, this library would call it's call backs when it was
     # notified of any state changeds for the relevant device.
