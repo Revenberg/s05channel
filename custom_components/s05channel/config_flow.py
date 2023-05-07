@@ -1,5 +1,6 @@
+"""s0 5 channels"""
 from __future__ import annotations
-import logging 
+import logging
 from typing import Any
 
 import voluptuous as vol
@@ -57,7 +58,7 @@ async def validate_input_title(hass: HomeAssistant, data: dict) -> dict[str, Any
     return {"title": data["host"]}
 
 async def validate_input_device(hass: HomeAssistant, data: dict) -> dict[str, Any]:
-    '''Validate the user input device to connect.'''
+    """Validate the user input device to connect."""
     if len(data[CONF_DEVICE ]) < 3:
         raise InvalidHost
 
@@ -98,7 +99,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     # changes.
     CONNECTION_CLASS = config_entries.CONN_CLASS_LOCAL_PUSH
 
-    data: Optional[Dict[str, Any]]
+    #data: Optional[Dict[str, Any]]
 
     async def async_step_user(self, user_input=None):
         """Handle the initial step."""
@@ -157,7 +158,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             _LOGGER.debug( user_input )
             data = await validate_input_device(self.hass, user_input )
 
-            hub = Hub(self.hass, data["title"], data[ CONF_DEVICE ])
+            Hub(self.hass, data["title"], data[ CONF_DEVICE ])
             _LOGGER.debug( data )
 #            try:
 #              result = await hub.connection()
