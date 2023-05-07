@@ -65,7 +65,7 @@ class Hub:
             self._instrument.close()
 
     def connected(self):
-        """Is connect to device?"""
+        """Is connect to device."""
         return self._instrument.isOpen()
 
     def get_value(self, id: int) -> float:

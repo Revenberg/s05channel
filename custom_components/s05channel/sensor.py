@@ -122,13 +122,15 @@ async def async_setup_entry(hass: core.HomeAssistant, config_entry: config_entri
 #        new_devices.append(EnergySensor(roller))
 #    if new_devices:
 #        async_add_entities(new_devices, True)
-    scan_interval = timedelta(seconds=60)
+    #scan_interval =
+    timedelta(seconds=60)
 
 #    async_add_entities([energySensor1(hub._instrument, scan_interval)], True)
     async_add_entities([energySensor1(hub._instrument, hub._name, 60)], True)
 
 class energySensor1(Entity):
     """energySensor1."""
+
     _attr_unit_of_measurement = ENERGY_KILO_WATT_HOUR
     device_clasync_added_to_hassass = DEVICE_CLASS_ENERGY
     p1 = 0
@@ -157,7 +159,7 @@ class energySensor1(Entity):
         return rc
 
     def round(self, floatval):
-        """Get value round."""        
+        """Get value round."""
         return round(floatval, 2)
 
     @property
@@ -174,10 +176,11 @@ class energySensor1(Entity):
         """async_added_to_hass."""
         _LOGGER.debug("added to hass, starting loop")
         loop = self.hass.loop
-        task = loop.create_task(self.energy_loop())
+        #task = 
+        loop.create_task(self.energy_loop())
 
     async def energy_loop(self):
-        """Energy loop"""
+        """Energy loop."""
         while True:
             try:
                 _LOGGER.debug("=============================================================")
@@ -269,16 +272,19 @@ class energySensor1(Entity):
     @property
     def name(self):
         """Return the name of the sensor."""
+
         return self._name
 
     @property
     def should_poll(self):
         """Return the polling state."""
+        
         return False
 
     @property
     def icon(self):
         """Return the icon to use in the frontend."""
+        
         return ICON
 
 #    @property
@@ -289,6 +295,7 @@ class energySensor1(Entity):
     @property
     def unique_id(self):
         """Get uniq id."""
+        
         return self._name
 
 
@@ -300,8 +307,9 @@ class SensorBase(Entity):
     should_poll = False
 
     def __init__(self, roller):
-        _LOGGER.debug("SensorBase")
         """Initialize the sensor."""
+        
+        _LOGGER.debug("SensorBase")
         self._roller = roller
 
     # To link this entity to the cover device, this property must return an
@@ -345,10 +353,10 @@ class EnergySensor(SensorBase):
     _attr_unit_of_measurement = ENERGY_KILO_WATT_HOUR
 
     def __init__(self, roller):
-        super().__init__(roller)
-        _LOGGER.debug("__init__")
         # As per the sensor, this must be a unique value within this domain. This is done
         # by using the device ID, and appending "_ENERGY"
+        super().__init__(roller)
+        _LOGGER.debug("__init__")
         self._attr_unique_id = f"{self._roller.roller_id}_energy"
 
         # The name of the entity
@@ -363,9 +371,10 @@ class EnergySensor(SensorBase):
        # _LOGGER.debug("=============================================================")
 
     async def async_added_to_hass(self):
+        """async_added_to_hass."""
         _LOGGER.debug("added to hass, starting loop")
         loop = self.hass.loop
-        #task = 
+        #task =
         loop.create_task(self.s05channel_loop())
 
     async def s05channel_loop(self):
@@ -437,6 +446,7 @@ class EnergySensor(SensorBase):
 
     @property
     def unique_id(self):
+        """unique id."""
         return self._attr_name
 
 class BatterySensor(SensorBase):
@@ -451,10 +461,10 @@ class BatterySensor(SensorBase):
     # should be PERCENTAGE. A number of units are supported by HA, for some
     # examples, see:
     # https://developers.home-assistant.io/docs/core/entity/sensor#available-device-classes
-    _attr_unit_of_measurement = PERCENTAGE
+    #_attr_unit_of_measurement = PERCENTAGE
 
     def __init__(self, roller):
-        """init"""
+        """Init."""
         super().__init__(roller)
 
         # As per the sensor, this must be a unique value within this domain. This is done
