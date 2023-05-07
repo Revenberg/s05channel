@@ -440,10 +440,10 @@ class EnergySensor(SensorBase):
         ICON = "mdi:power-plug"
         return ICON
 
-    @property
-    def unit_of_measurement(self):
-        """Return the unit of measurement of this entity."""
-        return "W"
+    #@property
+    #def unit_of_measurement(self):
+    #    """Return the unit of measurement of this entity."""
+    #    return "W"
 
     @property
     def unique_id(self):
