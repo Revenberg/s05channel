@@ -129,7 +129,7 @@ async def async_remove_config_entry_device(
 
 class S05ChannelCoordinator(DataUpdateCoordinator):
     """S05ChannelCoordinator."""
-    
+
     def __init__(
         self, hass: HomeAssistant, hub: S05ChannelMultiHub, scan_interval: int
     ):
@@ -165,17 +165,8 @@ class S05ChannelCoordinator(DataUpdateCoordinator):
         wait_ms=100,
         wait_ratio=2,
     ):
-        """
-        Retry refresh until no exception occurs or retries exhaust
-        :param ex_type: retry only if exception is subclass of this type
-        :param limit: maximum number of invocation attempts
-        :param wait_ms: initial wait time after each attempt in milliseconds.
-        :param wait_ratio: increase wait by multiplying by this after each try.
-        :return: result of first successful invocation
-        :raises: last invocation exception if attempts exhausted
-                 or exception is not an instance of ex_type.
-        """
-        
+        """Retry refresh until no exception occurs or retries exhaust."""
+
         attempt = 1
         while True:
             try:
