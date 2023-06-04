@@ -1,6 +1,3 @@
-import ipaddress
-import re
-
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant import config_entries
@@ -17,7 +14,6 @@ def s05channel_multi_entries(hass: HomeAssistant):
     return set(
         entry.data[CONF_HOST] for entry in hass.config_entries.async_entries(DOMAIN)
     )
-
 
 class S05ChannelMultiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """S05Channel configflow."""

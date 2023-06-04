@@ -1,3 +1,4 @@
+"""s0 channel."""
 import logging
 import threading
 from collections import OrderedDict

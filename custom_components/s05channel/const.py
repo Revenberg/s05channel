@@ -1,4 +1,5 @@
-import sys
+"""Constants for the Detailed Hello World Push integration."""
+
 from enum import IntEnum
 
 DOMAIN = "s05channel"
@@ -22,7 +23,7 @@ class RetrySettings(IntEnum):
 class ConfDefaultInt(IntEnum):
     SCAN_INTERVAL = 60
     HOST = "/dev/ttyACM0"
-    
+
 # parameter names per sunspec
 DEVICE_STATUS = {
     1: "I_STATUS_OFF",
@@ -47,4 +48,3 @@ DEVICE_STATUS_TEXT = {
     8: "Maintenance",
     9: "Running",
 }
-    

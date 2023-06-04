@@ -20,7 +20,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 from .const import DOMAIN,  ConfDefaultInt
 # ConfDefaultFlag,
 from .const import RetrySettings
-#ConfName, 
+#ConfName,
 from .hub import DataUpdateFailed, HubInitFailed, S05ChannelMultiHub
 
 _LOGGER = logging.getLogger(__name__)
@@ -128,6 +128,7 @@ async def async_remove_config_entry_device(
 
 
 class S05ChannelCoordinator(DataUpdateCoordinator):
+    """S05ChannelCoordinator."""
     def __init__(
         self, hass: HomeAssistant, hub: S05ChannelMultiHub, scan_interval: int
     ):
@@ -172,6 +173,7 @@ class S05ChannelCoordinator(DataUpdateCoordinator):
         :raises: last invocation exception if attempts exhausted
                  or exception is not an instance of ex_type
         """
+        
         attempt = 1
         while True:
             try:
