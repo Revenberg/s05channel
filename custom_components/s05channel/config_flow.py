@@ -25,6 +25,8 @@ class S05ChannelMultiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     @staticmethod
     @callback
     def async_get_options_flow(config_entry: ConfigEntry):
+        """async_get_options_flow."""
+        
         return S05ChannelMultiOptionsFlowHandler(config_entry)
 
     def _host_in_configuration_exists(self, host) -> bool:
@@ -78,11 +80,15 @@ class S05ChannelMultiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
 
 class S05ChannelMultiOptionsFlowHandler(config_entries.OptionsFlow):
+    """S05ChannelMultiOptionsFlowHandler."""
+    
     def __init__(self, config_entry: ConfigEntry):
         """Initialize options flow."""
         self.config_entry = config_entry
 
     async def async_step_init(self, user_input=None) -> FlowResult:
+        """async_step_init."""
+        
         errors = {}
 
         """Manage the options."""

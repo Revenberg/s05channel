@@ -1,5 +1,7 @@
+"""Sensor."""
+
 import logging
-import re
+#import re
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
@@ -52,6 +54,8 @@ async def async_setup_entry(
     config_entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
+    """async_setup_entry."""
+
     hub = hass.data[DOMAIN][config_entry.entry_id]["hub"]
     coordinator = hass.data[DOMAIN][config_entry.entry_id]["coordinator"]
 
@@ -74,58 +78,82 @@ async def async_setup_entry(
         async_add_entities(entities)
 
 class S05ChannelSensorBase(CoordinatorEntity, SensorEntity):
+    """S05ChannelSensorBase."""
+
     should_poll = False
     #suggested_display_precision = 3
     _attr_has_entity_name = True
-    
+
     def __init__(self, platform, config_entry, coordinator):
         """Pass coordinator to CoordinatorEntity."""
+        
         super().__init__(coordinator)
         """Initialize the sensor."""
         self._platform = platform
         self._config_entry = config_entry
-    
+
     @property
     def device_info(self):
+        """device_info."""
+        
         return self._platform.device_info
 
     @property
     def config_entry_id(self):
+        """config_entry_id."""
+        
         return self._config_entry.entry_id
 
     @property
     def config_entry_name(self):
+        """config_entry_name."""
+        
         return self._config_entry.data["name"]
 
     @property
     def available(self) -> bool:
+        """available."""
+        
         return self._platform.online
 
     @callback
     def _handle_coordinator_update(self) -> None:
+        """_handle_coordinator_update."""
+        
         self.async_write_ha_state()
 
 class S05ChannelDevice(S05ChannelSensorBase):
+    """S05ChannelDevice."""
+    
     entity_category = EntityCategory.DIAGNOSTIC
 
     def __init__(self, platform, config_entry, coordinator):
-        super().__init__(platform, config_entry, coordinator)
         """Initialize the sensor."""
 
+        super().__init__(platform, config_entry, coordinator)
+        
     @property
     def unique_id(self) -> str:
+        """unique_id."""
+        
         return f"{self._platform.uid_base}_device"
 
     @property
     def name(self) -> str:
+        """Name."""
+        
         return "Device"
 
     @property
     def native_value(self):
+        """native_value."""
+        
         return self._platform.model
 
     @property
     def extra_state_attributes(self):
+        """extra_state_attributes."""
+        
         attrs = {}
 
         attrs["device_id"] = self._platform.device_address
@@ -141,6 +169,8 @@ class S05ChannelDevice(S05ChannelSensorBase):
 
 
 class Version(S05ChannelSensorBase):
+    """Version."""
+    
     entity_category = EntityCategory.DIAGNOSTIC
 
     def __init__(self, platform, config_entry, coordinator):
@@ -149,29 +179,40 @@ class Version(S05ChannelSensorBase):
 
     @property
     def unique_id(self) -> str:
+        """unique_id."""
+        
         return f"{self._platform.uid_base}_version"
 
     @property
     def name(self) -> str:
+        """Name."""
+        
         return "Version"
 
     @property
     def native_value(self):
+        """native_value."""
+        
         return self._platform.fw_version
 
 class S05ChannelPort(S05ChannelSensorBase):
+    """S05ChannelPort."""
+    
 #    device_class = SensorDeviceClass.CURRENT
     state_class = SensorStateClass.MEASUREMENT
 #    native_unit_of_measurement = UnitOfElectricCurrent.AMPERE
     suggested_display_precision = 1
 
     def __init__(self, platform, config_entry, coordinator, port: str = None):
-        super().__init__(platform, config_entry, coordinator)
         """Initialize the sensor."""
+        
+        super().__init__(platform, config_entry, coordinator)
         self._port = port
 
     @property
     def unique_id(self) -> str:
+        """unique_id."""
+        
         if self._port is None:
             return f"{self._platform.uid_base}_s05channel_port"
         else:
@@ -179,6 +220,8 @@ class S05ChannelPort(S05ChannelSensorBase):
 
     @property
     def name(self) -> str:
+        """name."""
+        
         if self._port is None:
             return "S05Channel"
         else:
@@ -186,6 +229,8 @@ class S05ChannelPort(S05ChannelSensorBase):
 
     @property
     def native_value(self):
+        """native_value."""
+        
         if self._port is None:
             model_key = "p"
         else:
@@ -194,43 +239,61 @@ class S05ChannelPort(S05ChannelSensorBase):
         return self._platform.decoded_model[model_key]
 
 class S05ChannelStatusSensor(S05ChannelSensorBase):
+    """S05ChannelStatusSensor."""
+    
     device_class = SensorDeviceClass.ENUM
     entity_category = EntityCategory.DIAGNOSTIC
 
     def __init__(self, platform, config_entry, coordinator):
-        super().__init__(platform, config_entry, coordinator)
         """Initialize the sensor."""
+
+        super().__init__(platform, config_entry, coordinator)
 
     @property
     def unique_id(self) -> str:
+        """unique_id."""
+        
         return f"{self._platform.uid_base}_status"
 
     @property
     def name(self) -> str:
+        """Name."""
+        
         return "Status"
 
     @property
     def native_value(self):
+        """native_value."""
+        
         return "Active"
 
 class S05ChannelInverterStatus(S05ChannelStatusSensor):
+    """S05ChannelInverterStatus."""
+    
     options = list(DEVICE_STATUS_TEXT.values())
 
     def __init__(self, platform, config_entry, coordinator):
-        super().__init__(platform, config_entry, coordinator)
         """Initialize the sensor."""
 
-    @property
-    def unique_id(self) -> str:
-        return f"{self._platform.uid_base}_i_status"
+        super().__init__(platform, config_entry, coordinator)
         
     @property
+    def unique_id(self) -> str:
+        """unique_id."""
+        
+        return f"{self._platform.uid_base}_i_status"
+
+    @property
     def native_value(self):
+        """native_value."""
+        
         _LOGGER.debug(" native_value i_status")
         return "Running"
 
     @property
     def extra_state_attributes(self):
+        """extra_state_attributes."""
+        
         attrs = {}
         _LOGGER.debug(" extra_state_attributes")
 
@@ -249,33 +312,44 @@ class S05ChannelInverterStatus(S05ChannelStatusSensor):
         return attrs
 
 class StatusVendor(S05ChannelSensorBase):
+    """StatusVendor."""
+    
     device_class = SensorDeviceClass.ENUM
     entity_category = EntityCategory.DIAGNOSTIC
     options = list(DEVICE_STATUS_TEXT.values())
 
     def __init__(self, platform, config_entry, coordinator):
-        super().__init__(platform, config_entry, coordinator)
         """Initialize the sensor."""
 
+        super().__init__(platform, config_entry, coordinator)
+        
     @property
     def unique_id(self) -> str:
+        """unique_id."""
+        
         return f"{self._platform.uid_base}_status_vendor"
 
     @property
     def name(self) -> str:
+        """NAme."""
+        
         return "Status Vendor"
 
     @property
     def native_value(self):
+        """native_value."""
+        
         _LOGGER.debug("i_status_vendor")
 #        _LOGGER.debug(self._platform.decoded_model["i_status_vendor"])
 #        _LOGGER.debug(DEVICE_STATUS_TEXT[self._platform.decoded_model["i_status_vendor"]])
 
 #        return DEVICE_STATUS_TEXT[self._platform.decoded_model["i_status_vendor"]]
-        return "Running" 
-       
+        return "Running"
+
     @property
     def extra_state_attributes(self):
+        """extra_state_attributes."""
+        
         attrs = {}
         _LOGGER.debug("i_status_vendor extra_state_attributes")
 

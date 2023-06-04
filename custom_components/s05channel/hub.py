@@ -304,7 +304,7 @@ class S05ChannelInverter:
         return self.hub.online
 
     @property
-    def device_info(self) -> Optional[Dict[str, Any]]:
+    def device_info(self) -> Optional[dict[str, Any]]:
         """device_info."""
 
         return self._device_info

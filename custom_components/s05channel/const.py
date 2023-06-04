@@ -22,6 +22,7 @@ class RetrySettings(IntEnum):
 
 class ConfDefaultInt(IntEnum):
     """ConfDefaultInt."""
+    
     SCAN_INTERVAL = 60
     HOST = "/dev/ttyACM0"
 
