@@ -129,9 +129,11 @@ async def async_remove_config_entry_device(
 
 class S05ChannelCoordinator(DataUpdateCoordinator):
     """S05ChannelCoordinator."""
+    
     def __init__(
         self, hass: HomeAssistant, hub: S05ChannelMultiHub, scan_interval: int
     ):
+        """Init so channel coordinator."""
         super().__init__(
             hass,
             _LOGGER,
@@ -171,7 +173,7 @@ class S05ChannelCoordinator(DataUpdateCoordinator):
         :param wait_ratio: increase wait by multiplying by this after each try.
         :return: result of first successful invocation
         :raises: last invocation exception if attempts exhausted
-                 or exception is not an instance of ex_type
+                 or exception is not an instance of ex_type.
         """
         
         attempt = 1

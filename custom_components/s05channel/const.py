@@ -21,6 +21,7 @@ class RetrySettings(IntEnum):
     Limit = 4  # number of attempts before failing
 
 class ConfDefaultInt(IntEnum):
+    """ConfDefaultInt."""
     SCAN_INTERVAL = 60
     HOST = "/dev/ttyACM0"
 

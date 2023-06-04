@@ -13,52 +13,53 @@ _LOGGER = logging.getLogger(__name__)
 _LOGGER.setLevel(logging.DEBUG)
 
 class ConnectionException(Exception):
-    """Base class for other exceptions"""
+    """Base class for other exceptions."""
 
     pass
 
 class S05ChannelException(Exception):
-    """Base class for other exceptions"""
+    """Base class for other exceptions."""
 
     pass
 
 
 class HubInitFailed(S05ChannelException):
-    """Raised when an error happens during init"""
+    """Raised when an error happens during init."""
 
     pass
 
 
 class DeviceInitFailed(S05ChannelException):
-    """Raised when a device can't be initialized"""
+    """Raised when a device can't be initialized."""
 
     pass
 
 class s05channelReadError(S05ChannelException):
-    """Raised when a s05channel read fails"""
+    """Raised when a s05channel read fails."""
 
     pass
 
 
 class s05channelWriteError(S05ChannelException):
-    """Raised when a s05channel write fails"""
+    """Raised when a s05channel write fails."""
 
     pass
 
 
 class DataUpdateFailed(S05ChannelException):
-    """Raised when an update cycle fails"""
+    """Raised when an update cycle fails."""
 
     pass
 
 
 class DeviceInvalid(S05ChannelException):
-    """Raised when a device is not usable or invalid"""
+    """Raised when a device is not usable or invalid."""
 
     pass
 
 
 class S05ChannelMultiHub:
+    """S05ChannelMultiHub."""
     def __init__(
         self,
         hass: HomeAssistant,
@@ -82,6 +83,8 @@ class S05ChannelMultiHub:
         self._online = False
 
     async def _async_init_s05channel(self) -> None:
+        """Async_init_s05channel."""
+        
         inverter_unit_id = 1
 
         try:
@@ -117,6 +120,7 @@ class S05ChannelMultiHub:
         self.initalized = True
 
     async def async_refresh_s05channel_data(self, _now: Optional[int] = None) -> bool:
+        """async_refresh_s05channel_data."""
         if not self.is_socket_open():
             await self.connect()
 
@@ -192,6 +196,8 @@ class S05ChannelMultiHub:
 class S05ChannelInverter:
     _delta_energy = 0
     def __init__(self, device_id: int, hub: S05ChannelMultiHub) -> None:
+        """Init."""
+        
         self.inverter_unit_id = device_id
         self.hub = hub
         self.decoded_common = []
@@ -202,7 +208,8 @@ class S05ChannelInverter:
         self._delta_energy = 0
 
     def init_device(self) -> None:
-
+        """init_device."""
+        
         _LOGGER.debug("init_device")
         self.read_s05channel_data_common()
 
