@@ -1,217 +1,289 @@
-"""A demonstration 'hub' that connects several devices."""
-from __future__ import annotations
-
-# In a real implementation, this would be in an external library that's on PyPI.
-# The PyPI package needs to be included in the `requirements` section of manifest.json
-# See https://developers.home-assistant.io/docs/creating_integration_manifest
-# for more information.
-# This dummy hub always returns 5 rollers.
-import asyncio
-import random
-import serial
-import datetime
+import logging
+import threading
+from collections import OrderedDict
+from typing import Any, Dict, Optional
 
 from homeassistant.core import HomeAssistant
-import logging
+
+from .const import DOMAIN
+import serial
+
 _LOGGER = logging.getLogger(__name__)
 _LOGGER.setLevel(logging.DEBUG)
 
-class Hub:
-    """Hub for s0 5 channel."""
+class ConnectionException(Exception):
+    """Base class for other exceptions"""
 
-    manufacturer = "SOS 5-channel s0"
-    _device = ""
-    _instrument = None
-    _lastupdate = 0
-    _values = []
-    def __init__(self, hass: HomeAssistant, name: str, device: str) -> None:
-        """Init dummy hub."""
-        self._name = name
+    pass
+
+class S05ChannelException(Exception):
+    """Base class for other exceptions"""
+
+    pass
+
+
+class HubInitFailed(S05ChannelException):
+    """Raised when an error happens during init"""
+
+    pass
+
+
+class DeviceInitFailed(S05ChannelException):
+    """Raised when a device can't be initialized"""
+
+    pass
+
+class s05channelReadError(S05ChannelException):
+    """Raised when a s05channel read fails"""
+
+    pass
+
+
+class s05channelWriteError(S05ChannelException):
+    """Raised when a s05channel write fails"""
+
+    pass
+
+
+class DataUpdateFailed(S05ChannelException):
+    """Raised when an update cycle fails"""
+
+    pass
+
+
+class DeviceInvalid(S05ChannelException):
+    """Raised when a device is not usable or invalid"""
+
+    pass
+
+
+class S05ChannelMultiHub:
+    def __init__(
+        self,
+        hass: HomeAssistant,
+        name: str,
+        device: str,
+    ):
+        """Initialize the s05channel hub."""
         self._hass = hass
+        self._name = name
         self._device = device
-        self._id = random.randint(1, 10000)
-        _LOGGER.debug(self._device )
-        _LOGGER.debug( self.get_device() )
-        self.connection()
-        self.rollers = [
-            Roller(f"{self._id}_1", 1, f"{self._name} Port 1", self),
-            Roller(f"{self._id}_2", 2, f"{self._name} Port 2", self),
-            Roller(f"{self._id}_3", 3, f"{self._name} Port 3", self),
-            Roller(f"{self._id}_4", 4, f"{self._name} Port 4", self),
-            Roller(f"{self._id}_5", 5, f"{self._name} Port 5", self),
-        ]
-        self.online = True
+        self._lock = threading.Lock()
+        self._id = name.lower()
+        self._coordinator_timeout = 30
+        self._client = None
+        self._id = name.lower()
+        self._lock = threading.Lock()
+        self.inverters = []
+        self.meters = []
 
-    def get_device(self) -> str:
-        """Get device."""
-        _LOGGER.debug("get_device" )
-        _LOGGER.debug( self._device )
-        return self._device
+        self.initalized = False
+        self._online = False
+
+    async def _async_init_s05channel(self) -> None:
+        inverter_unit_id = 1
+
+        try:
+            new_inverter = S05ChannelInverter(inverter_unit_id, self)
+            await self._hass.async_add_executor_job(new_inverter.init_device)
+            self.inverters.append(new_inverter)
+
+        except s05channelReadError as e:
+            _LOGGER.debug("---------------1---------------------------")
+            raise HubInitFailed(f"{e}")
+
+        except DeviceInvalid as e:
+            """Inverters are required"""
+            _LOGGER.error(f"Inverter device ID {inverter_unit_id}: {e}")
+            raise HubInitFailed(f"{e}")
+
+        try:
+            for inverter in self.inverters:
+                await self._hass.async_add_executor_job(inverter.read_s05channel_data)
+
+        except s05channelReadError as e:
+            self._online = False
+            raise HubInitFailed(f"Read error: {e}")
+
+        except DeviceInvalid as e:
+            self._online = False
+            raise HubInitFailed(f"Invalid device: {e}")
+
+        except ConnectionException as e:
+            self._online = False
+            raise HubInitFailed(f"Connection failed: {e}")
+
+        self.initalized = True
+
+    async def async_refresh_s05channel_data(self, _now: Optional[int] = None) -> bool:
+        if not self.is_socket_open():
+            await self.connect()
+
+        if not self.initalized:
+            try:
+                await self._async_init_s05channel()
+
+            except ConnectionException as e:
+                raise HubInitFailed(f"Setup failed: {e}")
+
+        self._online = True
+        try:
+            for inverter in self.inverters:
+                await self._hass.async_add_executor_job(inverter.read_s05channel_data)
+
+        except s05channelReadError as e:
+            self._online = False
+            raise DataUpdateFailed(f"Update failed: {e}")
+
+        except DeviceInvalid as e:
+            self._online = False
+            raise DataUpdateFailed(f"Invalid device: {e}")
+
+        except ConnectionException as e:
+            self._online = False
+            raise DataUpdateFailed(f"Connection failed: {e}")
+
+        return True
+
+    @property
+    def online(self):
+        return self._online
+
+    @property
+    def name(self):
+        """Return the name of this hub."""
+        return self._name
 
     @property
     def hub_id(self) -> str:
-        """ID for dummy hub."""
         return self._id
 
-    def connect(self):
-        """Connect to device."""
-        if not self._instrument.isOpen():
-            self._instrument.open()
-            self._instrument.setRTS(False)
+    @property
+    def coordinator_timeout(self) -> int:
+        _LOGGER.debug(f"coordinator timeout is {self._coordinator_timeout}")
+        return self._coordinator_timeout
 
-    def disconnect(self):
-        """Disconnect device."""
-        if self._instrument.isOpen():
-            self._instrument.close()
-
-    def connected(self):
-        """Is connect to device."""
-        return self._instrument.isOpen()
-
-    def get_value(self, id: int) -> float:
-          """Get data."""
-          now = datetime.datetime.now()
-          current = (now.hour * 100) +  now.minute
-          if ( self._lastupdate != current):
-            try:
-              line = self._instrument.readline()
-            except Exception as e:
-              _LOGGER.error(f'exception: {e}')
-              #print(traceback.format_exc())
-            #_LOGGER.debug("==================== line =========================================")
-            _LOGGER.info(line)
-            #_LOGGER.debug("=============================================================")
-            _LOGGER.info(line.decode("utf-8") )
-            values = line.decode("utf-8").split(":")
-            _LOGGER.info(values[1])
-            _LOGGER.info(values[6])
-            _LOGGER.info(values[9])
-            _LOGGER.info(values[12])
-            _LOGGER.info(values[15])
-            _LOGGER.info(values[18])
-            _LOGGER.info( values )
-            self._values = [ values[1], values[6], values[9], values[11], values[15], values[18] ]
-            self._lastupdate = current
-
-            #_LOGGER.info("end--------------------------------------------------")
-          _LOGGER.debug( self._values[id] )
-          return self._values[id]
-
-    def connection(self):
-        """Test connectivity is OK."""
-        BAUDRATE = 9600
-        self._instrument = serial.Serial(
+    async def connect(self) -> None:
+        """Connect s05channel client."""
+        if self._client is None:
+            BAUDRATE = 9600
+            self._client = serial.Serial(
                   self._device,
                   BAUDRATE,
                   timeout=10,
                   bytesize=serial.SEVENBITS,
                   parity=serial.PARITY_EVEN,
                   stopbits=serial.STOPBITS_ONE
-          )
+            )
 
-class Roller:
-    """Dummy roller (device for HA) for Hello World example."""
+    def is_socket_open(self) -> bool:
+        """Check s05channel client connection status."""
+        if self._client is None:
+            return False
 
-    hub = None
-    _hubid = 0
-    def __init__(self, rollerid: str, hubid: int, name: str, myhub: Hub) -> None:
-        """Init dummy roller."""
-#        _LOGGER.debug("!@!@!@!@ Roller")
-        self._id = rollerid
-        self._hubid = hubid
-        self.hub = myhub
-#        _LOGGER.debug( hubid )
-        myhub.get_device()
-#        _LOGGER.debug( "-----------" )
-#        _LOGGER.debug( myhub.get_device() )
-#        _LOGGER.debug( "-----------" )
-#        _LOGGER.debug( self.hub.get_device() )
-        self.name = name
-        self._callbacks = set()
-        self._loop = asyncio.get_event_loop()
-        self._target_position = 100
-        self._current_position = 100
-        # Reports if the roller is moving up or down.
-        # >0 is up, <0 is down. This very much just for demonstration.
-        self.moving = 0
+        return True
 
-        # Some static information about this device
-        self.firmware_version = "0.0.1"
-        self.model = "s0 port"
+    async def shutdown(self) -> None:
+        """Shut down the hub."""
+        self._online = False
+        self._client = None
 
-    def get_device(self) -> str:
-        """Return dev from hub for roller."""
-        _LOGGER.debug("--------------------------------")
-        return self.hub.get_device()
+class S05ChannelInverter:
+    _delta_energy = 0
+    def __init__(self, device_id: int, hub: S05ChannelMultiHub) -> None:
+        self.inverter_unit_id = device_id
+        self.hub = hub
+        self.decoded_common = []
+        self.decoded_model = []
+        self.has_parent = False
+        self.global_power_control = None
+        self.manufacturer = "S05Channel"
+        self._delta_energy = 0
+
+    def init_device(self) -> None:
+
+        _LOGGER.debug("init_device")
+        self.read_s05channel_data_common()
+
+        #self.manufacturer = self.decoded_common["C_Manufacturer"]
+        self.manufacturer = "S05Channel"
+        #self.model = self.decoded_common["C_Model"]
+        self.model = "S05 Channel"
+        #self.option = self.decoded_common["C_Option"]
+        #self.fw_version = self.decoded_common["C_Version"]
+
+        self.fw_version = self.decoded_common["C_SunSpec_DID"]
+        #self.serial = self.decoded_common["C_SerialNumber"]
+        self.serial = self.decoded_common["SN"]
+        self.device_address = f"{self.hub._host}"
+
+        #self.name = f"{self.hub.hub_id.capitalize()} I{self.inverter_unit_id}"
+        self.uid_base = f"{self.hub.hub_id.capitalize()} I"
+        + self.decoded_common["C_SunSpec_DID"]
+
+        self._device_info = {
+            "identifiers": {(DOMAIN, int(self.decoded_common["C_SunSpec_DID"]))},
+            "name": self.device_address,
+            "manufacturer": "S05Channel",
+            "model": self.model,
+            "sw_version": self.fw_version,
+            #"hw_version": self.option,
+        }
+
+    def round(self, floatval):
+        return round(floatval, 2)
+
+    def read_s05channel_data_common(self) -> None:
+        #_LOGGER.debug("read_s05channel_data")
+
+        try:
+            self.hub.connect()
+        except ConnectionException as e:
+            _LOGGER.error(f"Connection error: {e}")
+            self._online = False
+            raise s05channelReadError(f"{e}")
+
+
+    def read_s05channel_data(self) -> None:
+        # _LOGGER.debug("read_s05channel_data")
+
+        try:
+              line = self._instrument.readline()
+        except Exception as e:
+              _LOGGER.error(f'exception: {e}')
+              #print(traceback.format_exc())
+            #_LOGGER.debug("==================== line =========================================")
+        _LOGGER.info(line)
+        #_LOGGER.debug("=============================================================")
+        _LOGGER.info(line.decode("utf-8") )
+        values = line.decode("utf-8").split(":")
+        _LOGGER.info(values[1])
+        _LOGGER.info(values[6])
+        _LOGGER.info(values[9])
+        _LOGGER.info(values[12])
+        _LOGGER.info(values[15])
+        _LOGGER.info(values[18])
+        _LOGGER.info( values )
+
+        self.decoded_model = OrderedDict(
+            [
+                ("p", values[1]),
+                ("p1", values[6]),
+                ("p2", values[9]),
+                ("p3", values[11]),
+                ("p4", values[15]),
+                ("p5", values[18]),
+            ]
+        )
+
+        self.hub._online = True
+        _LOGGER.debug(f"Inverter: {self.decoded_model}")
 
     @property
-    def roller_id(self) -> str:
-        """Return ID for roller."""
-        return self._id
+    def online(self) -> bool:
+        """Device is online."""
+        return self.hub.online
 
     @property
-    def position(self):
-        """Return position for roller."""
-        return self._current_position
-
-    async def set_position(self, position: int) -> None:
-        """Set dummy cover to the given position.
-
-        State is announced a random number of seconds later.
-        """
-        self._target_position = position
-
-        # Update the moving status, and broadcast the update
-        self.moving = position - 50
-        await self.publish_updates()
-
-        self._loop.create_task(self.delayed_update())
-
-    async def delayed_update(self) -> None:
-        """Publish updates, with a random delay to emulate interaction with device."""
-        await asyncio.sleep(random.randint(1, 10))
-        self.moving = 0
-        await self.publish_updates()
-
-#    def register_callback(self, callback: Callable[[], None]) -> None:
-#        """Register callback, called when Roller changes state."""
-#        self._callbacks.add(callback)
-
-#    def remove_callback(self, callback: Callable[[], None]) -> None:
-#        """Remove previously registered callback."""
-#        self._callbacks.discard(callback)
-
-    # In a real implementation, this library would call it's call backs when it was
-    # notified of any state changeds for the relevant device.
-    async def publish_updates(self) -> None:
-        """Schedule call all registered callbacks."""
-        self._current_position = self._target_position
-        for callback in self._callbacks:
-            callback()
-
-    @property
-    def online(self) -> float:
-        """Roller is online."""
-        # The dummy roller is offline about 10% of the time. Returns True if online,
-        # False if offline.
-        return True # random.random() > 0.1
-
-    @property
-    def battery_level(self) -> int:
-        """Battery level as a percentage."""
-        return random.randint(0, 100)
-
-    @property
-    def battery_voltage(self) -> float:
-        """Return a random voltage roughly that of a 12v battery."""
-        return round(random.random() * 3 + 10, 2)
-
-#    @property
-#    def illuminance(self) -> int:
-#        """Return a sample illuminance in lux."""
-#        return random.randint(0, 500)
-
-    @property
-    def energy(self) -> int:
-        """Return a sample energy in Kwh."""
-        return self.hub.get_value(self._hubid)
+    def device_info(self) -> Optional[Dict[str, Any]]:
+        return self._device_info

@@ -1,0 +1,35 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "s05 Channel-configuratie",
+        "data": {
+          "name": "Sensor prefix",
+          "host": "S0Channel adres"
+        }
+      }
+    },
+    "error": {
+      "already_configured": "Apparaat is al geconfigureerd",
+      "invalid_host": "Ongeldig adres."
+    },
+    "abort": {
+      "already_configured": "Apparaat is al geconfigureerd"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "s05 Channel Instellingen",
+        "data": {
+          "scan_interval": "Oproepfrequentie (seconden)"
+        }
+      }      
+    },
+    "error": {
+      "invalid_scan_interval": "Geldig interval is 1 tot 86400 seconden.",
+      "invalid_sleep_interval": "Geldig interval is 0 tot 60 seconden.",
+      "invalid_percent": "Het geldige bereik is 0 tot 100 procent."
+    }
+  }
+}

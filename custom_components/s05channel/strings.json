@@ -2,10 +2,10 @@
   "config": {
     "step": {
       "user": {
-        "title": "s05 Channel Configuration",
+        "title": "s05channel Configuration",
         "data": {
           "name": "Sensor Prefix",
-          "host": "S0 channel Address"
+          "host": "Inverter s05channel Address"
         }
       }
     },
@@ -20,7 +20,7 @@
   "options": {
     "step": {
       "init": {
-        "title": "s05 Channel Options",
+        "title": "S05Channel Options",
         "data": {
           "scan_interval": "Polling Frequency (seconds)"
         }

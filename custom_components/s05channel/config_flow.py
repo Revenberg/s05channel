@@ -1,57 +1,38 @@
-"""Config flow."""
 import ipaddress
 import re
 
+import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant import config_entries
-from homeassistant.const import (CONF_HOST, CONF_NAME, CONF_PORT,
-                                 CONF_SCAN_INTERVAL)
+from homeassistant.config_entries import ConfigEntry
+from homeassistant.const import CONF_HOST, CONF_NAME, CONF_PORT, CONF_SCAN_INTERVAL
 from homeassistant.core import HomeAssistant, callback
+from homeassistant.data_entry_flow import FlowResult
 
-from .const import (
-	DEFAULT_NAME,
-	DEFAULT_PORT,
-	DEFAULT_SCAN_INTERVAL,
-	DOMAIN,
-)
-
-DATA_SCHEMA = vol.Schema(
-    {
-        vol.Optional(CONF_NAME, default=DEFAULT_NAME): str,
-        vol.Required(CONF_HOST): str,
-        vol.Required(CONF_PORT, default=DEFAULT_PORT): int,
-        vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): int,
-    }
-)
-
-
-def host_valid(host):
-    """Return True if hostname or IP address is valid."""
-    try:
-        if ipaddress.ip_address(host).version == (4 or 6):
-            return True
-    except ValueError:
-        disallowed = re.compile(r"[^a-zA-Z\d\-]")
-        return all(x and not disallowed.search(x) for x in host.split("."))
-
+from .const import DEFAULT_NAME, DOMAIN, ConfDefaultInt
 
 @callback
-def SolarEdge_modbus_entries(hass: HomeAssistant):
+def s05channel_multi_entries(hass: HomeAssistant):
     """Return the hosts already configured."""
     return set(
         entry.data[CONF_HOST] for entry in hass.config_entries.async_entries(DOMAIN)
     )
 
 
-class SolarEdgeModbusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """SolarEdge Modbus configflow."""
+class S05ChannelMultiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+    """S05Channel configflow."""
 
     VERSION = 1
     CONNECTION_CLASS = config_entries.CONN_CLASS_LOCAL_POLL
 
+    @staticmethod
+    @callback
+    def async_get_options_flow(config_entry: ConfigEntry):
+        return S05ChannelMultiOptionsFlowHandler(config_entry)
+
     def _host_in_configuration_exists(self, host) -> bool:
         """Return True if host exists in configuration."""
-        if host in SolarEdge_modbus_entries(self.hass):
+        if host in s05channel_multi_entries(self.hass):
             return True
         return False
 
@@ -60,19 +41,128 @@ class SolarEdgeModbusConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         errors = {}
 
         if user_input is not None:
-            host = user_input[CONF_HOST]
-
-            if self._host_in_configuration_exists(host):
+            if self._host_in_configuration_exists(user_input[CONF_HOST]):
                 errors[CONF_HOST] = "already_configured"
-            elif not host_valid(user_input[CONF_HOST]):
-                errors[CONF_HOST] = "invalid host IP"
             else:
                 await self.async_set_unique_id(user_input[CONF_HOST])
                 self._abort_if_unique_id_configured()
                 return self.async_create_entry(
                     title=user_input[CONF_NAME], data=user_input
                 )
+        else:
+            user_input = {
+                CONF_NAME: DEFAULT_NAME,
+                CONF_HOST: "",
+                CONF_PORT: ConfDefaultInt.PORT,
+#                ConfName.NUMBER_INVERTERS: ConfDefaultInt.NUMBER_INVERTERS,
+#                ConfName.DEVICE_ID: ConfDefaultInt.DEVICE_ID,
+            }
 
         return self.async_show_form(
-            step_id="user", data_schema=DATA_SCHEMA, errors=errors
+            step_id="user",
+            data_schema=vol.Schema(
+                {
+                    vol.Optional(CONF_NAME, default=user_input[CONF_NAME]): cv.string,
+                    vol.Required(CONF_HOST, default=user_input[CONF_HOST]): cv.string,
+                    vol.Required(CONF_PORT, default=user_input[CONF_PORT]): vol.Coerce(
+                        int
+                    ),
+ #                   vol.Required(
+ #                       f"{ConfName.NUMBER_INVERTERS}",
+ #                       default=user_input[ConfName.NUMBER_INVERTERS],
+ #                   ): vol.Coerce(int),
+ #                   vol.Required(
+ #                       f"{ConfName.DEVICE_ID}", default=user_input[ConfName.DEVICE_ID]
+ #                   ): vol.Coerce(int),
+                },
+            ),
+            errors=errors,
         )
+
+
+class S05ChannelMultiOptionsFlowHandler(config_entries.OptionsFlow):
+    def __init__(self, config_entry: ConfigEntry):
+        """Initialize options flow."""
+        self.config_entry = config_entry
+
+    async def async_step_init(self, user_input=None) -> FlowResult:
+        errors = {}
+
+        """Manage the options."""
+        if user_input is not None:
+            if user_input[CONF_SCAN_INTERVAL] < 1:
+                errors[CONF_SCAN_INTERVAL] = "invalid_scan_interval"
+            elif user_input[CONF_SCAN_INTERVAL] > 86400:
+                errors[CONF_SCAN_INTERVAL] = "invalid_scan_interval"
+            else:
+                return self.async_create_entry(title="", data=user_input)
+
+        else:
+            user_input = {
+                CONF_SCAN_INTERVAL: self.config_entry.options.get(
+                    CONF_SCAN_INTERVAL, ConfDefaultInt.SCAN_INTERVAL
+                ),
+            }
+
+        return self.async_show_form(
+            step_id="init",
+            data_schema=vol.Schema(
+                {
+                    vol.Optional(
+                        CONF_SCAN_INTERVAL,
+                        default=user_input[CONF_SCAN_INTERVAL],
+                    ): vol.Coerce(int),
+                },
+            ),
+            errors=errors,
+        )
+
+#    async def async_step_adv_pwr_ctl(self, user_input=None) -> FlowResult:
+#        """Power Control Options"""
+#        errors = {}
+
+#        if user_input is not None:
+#            if user_input[ConfName.SLEEP_AFTER_WRITE] < 0:
+#                errors[ConfName.SLEEP_AFTER_WRITE] = "invalid_sleep_interval"
+#            elif user_input[ConfName.SLEEP_AFTER_WRITE] > 60:
+#                errors[ConfName.SLEEP_AFTER_WRITE] = "invalid_sleep_interval"
+#            else:
+#                return self.async_create_entry(
+#                    title="", data={**self.init_info, **user_input}
+#                )
+
+ #       else:
+ #           user_input = {
+ #               ConfName.ADV_STORAGE_CONTROL: self.config_entry.options.get(
+ #                   ConfName.ADV_STORAGE_CONTROL,
+ #                   bool(ConfDefaultFlag.ADV_STORAGE_CONTROL),
+ #               ),
+ #               ConfName.ADV_SITE_LIMIT_CONTROL: self.config_entry.options.get(
+ #                   ConfName.ADV_SITE_LIMIT_CONTROL,
+ #                   bool(ConfDefaultFlag.ADV_SITE_LIMIT_CONTROL),
+ #               ),
+ #               ConfName.SLEEP_AFTER_WRITE: self.config_entry.options.get(
+ #                   ConfName.SLEEP_AFTER_WRITE, ConfDefaultInt.SLEEP_AFTER_WRITE
+ #               ),
+ #           }
+
+#        return self.async_show_form(
+#            step_id="adv_pwr_ctl",
+#            data_schema=vol.Schema(
+#                {
+#                    vol.Required(
+#                        f"{ConfName.ADV_STORAGE_CONTROL}",
+#                        default=user_input[ConfName.ADV_STORAGE_CONTROL],
+#                    ): cv.boolean,
+#                    vol.Required(
+#                        f"{ConfName.ADV_SITE_LIMIT_CONTROL}",
+#                        default=user_input[ConfName.ADV_SITE_LIMIT_CONTROL],
+#                    ): cv.boolean,
+#                    vol.Optional(
+#                        f"{ConfName.SLEEP_AFTER_WRITE}",
+#                        default=user_input[ConfName.SLEEP_AFTER_WRITE],
+#                    ): vol.Coerce(int),
+#                }
+#            ),
+#            errors=errors,
+#        )
