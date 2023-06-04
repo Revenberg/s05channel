@@ -176,7 +176,7 @@ class Version(S05ChannelSensorBase):
     def __init__(self, platform, config_entry, coordinator):
         """Initialize the sensor."""
         super().__init__(platform, config_entry, coordinator)
-        
+
     @property
     def unique_id(self) -> str:
         """unique_id."""
@@ -365,4 +365,3 @@ class StatusVendor(S05ChannelSensorBase):
 #            pass
         _LOGGER.debug(attrs)
         return attrs
-    
