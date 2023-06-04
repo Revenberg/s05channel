@@ -365,3 +365,4 @@ class StatusVendor(S05ChannelSensorBase):
 #            pass
         _LOGGER.debug(attrs)
         return attrs
+    
