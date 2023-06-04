@@ -12,9 +12,9 @@ from .const import DEFAULT_NAME, DOMAIN, ConfDefaultInt
 @callback
 def s05channel_multi_entries(hass: HomeAssistant):
     """Return the hosts already configured."""
-    return set(
+    return {
         entry.data[CONF_HOST] for entry in hass.config_entries.async_entries(DOMAIN)
-    )
+    }
 
 class S05ChannelMultiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """S05Channel configflow."""

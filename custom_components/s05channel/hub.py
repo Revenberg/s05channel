@@ -2,7 +2,8 @@
 import logging
 import threading
 from collections import OrderedDict
-from typing import Any, Dict, Optional
+from typing import Any, Optional
+# Dict
 
 from homeassistant.core import HomeAssistant
 
@@ -60,6 +61,7 @@ class DeviceInvalid(S05ChannelException):
 
 class S05ChannelMultiHub:
     """S05ChannelMultiHub."""
+
     def __init__(
         self,
         hass: HomeAssistant,
@@ -84,7 +86,7 @@ class S05ChannelMultiHub:
 
     async def _async_init_s05channel(self) -> None:
         """Async_init_s05channel."""
-        
+
         inverter_unit_id = 1
 
         try:
@@ -153,7 +155,7 @@ class S05ChannelMultiHub:
     @property
     def online(self):
         """Omline."""
-        
+
         return self._online
 
     @property
@@ -199,11 +201,11 @@ class S05ChannelMultiHub:
 
 class S05ChannelInverter:
     """S05ChannelInverter."""
-    
+
     _delta_energy = 0
     def __init__(self, device_id: int, hub: S05ChannelMultiHub) -> None:
         """Init."""
-        
+
         self.inverter_unit_id = device_id
         self.hub = hub
         self.decoded_common = []
@@ -215,7 +217,7 @@ class S05ChannelInverter:
 
     def init_device(self) -> None:
         """init_device."""
-        
+
         _LOGGER.debug("init_device")
         self.read_s05channel_data_common()
 
@@ -244,10 +246,11 @@ class S05ChannelInverter:
             #"hw_version": self.option,
         }
 
-    def round(self, floatval):
-        return round(floatval, 2)
+#    def round(self, floatval):
+#        return round(floatval, 2)
 
     def read_s05channel_data_common(self) -> None:
+        """Set common."""
         #_LOGGER.debug("read_s05channel_data")
 
         try:
@@ -259,6 +262,7 @@ class S05ChannelInverter:
 
 
     def read_s05channel_data(self) -> None:
+        """Read data."""
         # _LOGGER.debug("read_s05channel_data")
 
         try:
@@ -296,10 +300,11 @@ class S05ChannelInverter:
     @property
     def online(self) -> bool:
         """Device is online."""
+
         return self.hub.online
 
     @property
     def device_info(self) -> Optional[Dict[str, Any]]:
         """device_info."""
-        
+
         return self._device_info
