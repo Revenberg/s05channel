@@ -152,6 +152,8 @@ class S05ChannelMultiHub:
 
     @property
     def online(self):
+        """Omline."""
+        
         return self._online
 
     @property
@@ -161,10 +163,12 @@ class S05ChannelMultiHub:
 
     @property
     def hub_id(self) -> str:
+        """Return id."""
         return self._id
 
     @property
     def coordinator_timeout(self) -> int:
+        """coordinator_timeout."""
         _LOGGER.debug(f"coordinator timeout is {self._coordinator_timeout}")
         return self._coordinator_timeout
 
@@ -194,6 +198,8 @@ class S05ChannelMultiHub:
         self._client = None
 
 class S05ChannelInverter:
+    """S05ChannelInverter."""
+    
     _delta_energy = 0
     def __init__(self, device_id: int, hub: S05ChannelMultiHub) -> None:
         """Init."""
@@ -294,4 +300,6 @@ class S05ChannelInverter:
 
     @property
     def device_info(self) -> Optional[Dict[str, Any]]:
+        """device_info."""
+        
         return self._device_info
