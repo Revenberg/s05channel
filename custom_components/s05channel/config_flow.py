@@ -3,7 +3,8 @@ import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_HOST, CONF_NAME, CONF_PORT, CONF_SCAN_INTERVAL
+from homeassistant.const import CONF_HOST, CONF_NAME, CONF_SCAN_INTERVAL
+# CONF_PORT
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.data_entry_flow import FlowResult
 
@@ -51,8 +52,7 @@ class S05ChannelMultiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         else:
             user_input = {
                 CONF_NAME: DEFAULT_NAME,
-                CONF_HOST: "",
-                CONF_PORT: ConfDefaultInt.PORT,
+                CONF_HOST: ""
 #                ConfName.NUMBER_INVERTERS: ConfDefaultInt.NUMBER_INVERTERS,
 #                ConfName.DEVICE_ID: ConfDefaultInt.DEVICE_ID,
             }
@@ -63,9 +63,6 @@ class S05ChannelMultiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 {
                     vol.Optional(CONF_NAME, default=user_input[CONF_NAME]): cv.string,
                     vol.Required(CONF_HOST, default=user_input[CONF_HOST]): cv.string,
-                    vol.Required(CONF_PORT, default=user_input[CONF_PORT]): vol.Coerce(
-                        int
-                    ),
  #                   vol.Required(
  #                       f"{ConfName.NUMBER_INVERTERS}",
  #                       default=user_input[ConfName.NUMBER_INVERTERS],
