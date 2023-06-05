@@ -232,17 +232,17 @@ class S05ChannelInverter:
         #self.option = self.decoded_common["C_Option"]
         #self.fw_version = self.decoded_common["C_Version"]
 
-        self.fw_version = self.decoded_common["C_SunSpec_DID"]
+        #self.fw_version = self.decoded_common["C_S0_ID"]
         #self.serial = self.decoded_common["C_SerialNumber"]
         self.serial = self.decoded_common["SN"]
         self.device_address = f"{self.hub._device}"
 
         #self.name = f"{self.hub.hub_id.capitalize()} I{self.inverter_unit_id}"
-        h = self.decoded_common["C_SunSpec_DID"]
+        h = self.decoded_common["SN"]
         self.uid_base = f"{self.hub.hub_id.capitalize()} I{h}"
 
         self._device_info = {
-            "identifiers": {(DOMAIN, int(self.decoded_common["C_SunSpec_DID"]))},
+            "identifiers": {(DOMAIN, int(self.decoded_common["SN"]))},
             "name": self.device_address,
             "manufacturer": "S05Channel",
             "model": self.model,
@@ -264,12 +264,22 @@ class S05ChannelInverter:
             self._online = False
             raise s05channelReadError(f"{e}")
 
-        self.decoded_common = OrderedDict(
-            [
-                ("C_SunSpec_DID", "1"),
-                ("SN", "11111111111111111"),
-            ]
-        )
+        try:
+            line = self.hub._client.readline()
+            _LOGGER.info(line)
+            _LOGGER.debug("=============================================================")
+            _LOGGER.info(line.decode("utf-8") )
+            values = line.decode("utf-8").split(":")
+            _LOGGER.info(values[1])
+
+            self.decoded_common = OrderedDict(
+                [
+                    ("SN", values[1]),
+                ]
+            )
+        except Exception as e:
+            _LOGGER.debug("==================== line =========================================")
+            _LOGGER.error(f'exception: {e}')
 
     def read_s05channel_data(self) -> None:
         """Read data."""
@@ -298,7 +308,6 @@ class S05ChannelInverter:
 
             self.decoded_model = OrderedDict(
                 [
-                    ("p", values[1]),
                     ("p1", values[6]),
                     ("p2", values[9]),
                     ("p3", values[11]),
