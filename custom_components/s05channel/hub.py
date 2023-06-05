@@ -255,7 +255,7 @@ class S05ChannelInverter:
         try:
             line = self.hub._client.readline()
             _LOGGER.info(line)
-            _LOGGER.debug("=============================================================")
+            _LOGGER.debug("==================== common =========================================")
             _LOGGER.info(line.decode("utf-8") )
             values = line.decode("utf-8").split(":")
             _LOGGER.info(values[1])
@@ -266,7 +266,7 @@ class S05ChannelInverter:
                 ]
             )
         except Exception as e:
-            _LOGGER.debug("==================== line =========================================")
+            _LOGGER.debug("==================== common Exception =========================================")
             _LOGGER.error(f'exception: {e}')
 
     def read_s05channel_data(self) -> None:
@@ -283,7 +283,7 @@ class S05ChannelInverter:
         try:
             line = self.hub._client.readline()
             _LOGGER.info(line)
-            _LOGGER.debug("=============================================================")
+            _LOGGER.debug("===================== read_s05channel_data ========================================")
             _LOGGER.info(line.decode("utf-8") )
             values = line.decode("utf-8").split(":")
             _LOGGER.info(values[1])
@@ -309,7 +309,7 @@ class S05ChannelInverter:
             self.hub._online = True
             _LOGGER.debug(f"Inverter: {self.decoded_model}")
         except Exception as e:
-            _LOGGER.debug("==================== line =========================================")
+            _LOGGER.debug("==================== line Exception =========================================")
             _LOGGER.error(f'exception: {e}')
             self.decoded_model = OrderedDict(
                 [
