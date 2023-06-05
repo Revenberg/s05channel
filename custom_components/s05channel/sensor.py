@@ -201,11 +201,11 @@ class S05ChannelPort(S05ChannelSensorBase):
     #device_class = SensorDeviceClass.ENERGY
     #state_class = SensorStateClass.TOTAL_INCREASING
     #native_unit_of_measurement = UnitOfEnergy.KILO_WATT_HOUR
-    
+
     device_class = SensorDeviceClass.POWER
     state_class = SensorStateClass.MEASUREMENT
     native_unit_of_measurement = UnitOfPower.KILO_WATT_HOUR
-    
+
     suggested_display_precision = 0
 
     def __init__(self, platform, config_entry, coordinator, port: str = None):
