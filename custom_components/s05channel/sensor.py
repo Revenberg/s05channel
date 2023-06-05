@@ -204,7 +204,7 @@ class S05ChannelPort(S05ChannelSensorBase):
 
     device_class = SensorDeviceClass.POWER
     state_class = SensorStateClass.MEASUREMENT
-    native_unit_of_measurement = UnitOfPower.ENERGY_KILO_WATT_HOUR 
+    native_unit_of_measurement = UnitOfPower.ENERGY_KILO_WATT_HOUR
 
     suggested_display_precision = 0
 
