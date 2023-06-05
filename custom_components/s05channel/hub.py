@@ -234,8 +234,8 @@ class S05ChannelInverter:
         self.device_address = f"{self.hub._device}"
 
         #self.name = f"{self.hub.hub_id.capitalize()} I{self.inverter_unit_id}"
-        self.uid_base = f"{self.hub.hub_id.capitalize()} I"
-        + self.decoded_common["C_SunSpec_DID"]
+        h = self.decoded_common["C_SunSpec_DID"
+        self.uid_base = f"{self.hub.hub_id.capitalize()} I{h}]
 
         self._device_info = {
             "identifiers": {(DOMAIN, int(self.decoded_common["C_SunSpec_DID"]))},
