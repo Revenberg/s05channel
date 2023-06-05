@@ -64,8 +64,8 @@ async def async_setup_entry(
     for inverter in hub.inverters:
         entities.append(S05ChannelDevice(inverter, config_entry, coordinator))
         entities.append(Version(inverter, config_entry, coordinator))
-        entities.append(S05ChannelInverterStatus(inverter, config_entry, coordinator))
-        entities.append(StatusVendor(inverter, config_entry, coordinator))
+        entities.append(S05ChannelStatus(inverter, config_entry, coordinator))
+        #entities.append(StatusVendor(inverter, config_entry, coordinator))
         entities.append(S05ChannelPort(inverter, config_entry, coordinator))
         entities.append(S05ChannelPort(inverter, config_entry, coordinator, "1"))
         entities.append(S05ChannelPort(inverter, config_entry, coordinator, "2"))
@@ -270,8 +270,8 @@ class S05ChannelStatusSensor(S05ChannelSensorBase):
 
         return "Active"
 
-class S05ChannelInverterStatus(S05ChannelStatusSensor):
-    """S05ChannelInverterStatus."""
+class S05ChannelStatus(S05ChannelStatusSensor):
+    """S05ChannelStatus."""
 
     options = list(DEVICE_STATUS_TEXT.values())
 
@@ -291,7 +291,7 @@ class S05ChannelInverterStatus(S05ChannelStatusSensor):
         """native_value."""
 
         _LOGGER.debug(" native_value i_status")
-        return "Running"
+        return self._platform.decoded_model["status"]
 
     @property
     def extra_state_attributes(self):
@@ -314,47 +314,47 @@ class S05ChannelInverterStatus(S05ChannelStatusSensor):
         _LOGGER.debug(attrs)
         return attrs
 
-class StatusVendor(S05ChannelSensorBase):
-    """StatusVendor."""
+#class StatusVendor(S05ChannelSensorBase):
+#    """StatusVendor."""
 
-    device_class = SensorDeviceClass.ENUM
-    entity_category = EntityCategory.DIAGNOSTIC
-    options = list(DEVICE_STATUS_TEXT.values())
+#    device_class = SensorDeviceClass.ENUM
+#    entity_category = EntityCategory.DIAGNOSTIC
+#    options = list(DEVICE_STATUS_TEXT.values())
 
-    def __init__(self, platform, config_entry, coordinator):
-        """Initialize the sensor."""
+#    def __init__(self, platform, config_entry, coordinator):
+#        """Initialize the sensor."""
 
-        super().__init__(platform, config_entry, coordinator)
+#        super().__init__(platform, config_entry, coordinator)
 
-    @property
-    def unique_id(self) -> str:
-        """unique_id."""
+#    @property
+#    def unique_id(self) -> str:
+#        """unique_id."""
 
-        return f"{self._platform.uid_base}_status_vendor"
+#        return f"{self._platform.uid_base}_status_vendor"
 
-    @property
-    def name(self) -> str:
-        """NAme."""
+#    @property
+#    def name(self) -> str:
+#        """NAme."""
 
-        return "Status Vendor"
+#        return "Status Vendor"
 
-    @property
-    def native_value(self):
-        """native_value."""
+#    @property
+#    def native_value(self):
+#        """native_value."""
 
-        _LOGGER.debug("i_status_vendor")
+#        _LOGGER.debug("i_status_vendor")
 #        _LOGGER.debug(self._platform.decoded_model["i_status_vendor"])
 #        _LOGGER.debug(DEVICE_STATUS_TEXT[self._platform.decoded_model["i_status_vendor"]])
 
 #        return DEVICE_STATUS_TEXT[self._platform.decoded_model["i_status_vendor"]]
-        return "Running"
+#        return "Running"
 
-    @property
-    def extra_state_attributes(self):
-        """extra_state_attributes."""
+#    @property
+#    def extra_state_attributes(self):
+#        """extra_state_attributes."""
 
-        attrs = {}
-        _LOGGER.debug("i_status_vendor extra_state_attributes")
+#        attrs = {}
+#        _LOGGER.debug("i_status_vendor extra_state_attributes")
 
 #        try:
 #            if self._platform.decoded_model["i_status_vendor"] in DEVICE_STATUS_TEXT:
@@ -366,5 +366,5 @@ class StatusVendor(S05ChannelSensorBase):
 
 #        except KeyError:
 #            pass
-        _LOGGER.debug(attrs)
-        return attrs
+#        _LOGGER.debug(attrs)
+#        return attrs

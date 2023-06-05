@@ -308,6 +308,7 @@ class S05ChannelInverter:
 
             self.decoded_model = OrderedDict(
                 [
+                    ("status", "Running"),
                     ("p1", values[6]),
                     ("p2", values[9]),
                     ("p3", values[11]),
@@ -321,6 +322,11 @@ class S05ChannelInverter:
         except Exception as e:
             _LOGGER.debug("==================== line =========================================")
             _LOGGER.error(f'exception: {e}')
+            self.decoded_model = OrderedDict(
+                [
+                    ("status", "Stopped"),
+                ]
+            )
               #print(traceback.format_exc())
             #_LOGGER.debug("==================== line =========================================")
 

@@ -41,13 +41,6 @@ DEVICE_STATUS = {
 
 # English descriptions of parameter names
 DEVICE_STATUS_TEXT = {
-    1: "Off",
-    2: "Sleeping (Auto-Shutdown)",
-    3: "Grid Monitoring",
-    4: "Production",
-    5: "Production (Curtailed)",
-    6: "Shutting Down",
-    7: "Fault",
-    8: "Maintenance",
-    9: "Running",
+    1: "Running",
+    2: "Stopped",
 }
