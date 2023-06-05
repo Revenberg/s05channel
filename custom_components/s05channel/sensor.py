@@ -187,7 +187,7 @@ class S05ChannelSN(S05ChannelSensorBase):
     def name(self) -> str:
         """Name."""
 
-        return "S05ChannelSN"
+        return "Serial number"
 
     @property
     def native_value(self):
@@ -199,8 +199,8 @@ class S05ChannelPort(S05ChannelSensorBase):
     """S05ChannelPort."""
 
     device_class = SensorDeviceClass.ENERGY
-#    state_class = SensorStateClass.TOTAL_INCREASING
-    state_class = SensorStateClass.MEASUREMENT
+    state_class = SensorStateClass.TOTAL_INCREASING
+#    state_class = SensorStateClass.MEASUREMENT
     native_unit_of_measurement = UnitOfEnergy.KILO_WATT_HOUR
 
     suggested_display_precision = 0
