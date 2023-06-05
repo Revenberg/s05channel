@@ -235,10 +235,10 @@ class S05ChannelPort(S05ChannelSensorBase):
             model_key = "p"
         else:
             model_key = f"p{self._port}"
-        
+
         _LOGGER.debug("native_value")
         _LOGGER.debug(model_key)
-        
+
         return self._platform.decoded_model[model_key]
 
 class S05ChannelStatusSensor(S05ChannelSensorBase):
