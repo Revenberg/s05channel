@@ -14,7 +14,7 @@ CONF_SCAN_INTERVAL = 60
 
 
 HOST = "/dev/ttyACM0"
-    
+
 class RetrySettings(IntEnum):
     """Retry settings when opening a connection to the inverter fails."""
 
@@ -24,7 +24,7 @@ class RetrySettings(IntEnum):
 
 class ConfDefaultInt(IntEnum):
     """ConfDefaultInt."""
-    
+
     SCAN_INTERVAL = 60
 
 # parameter names per sunspec
