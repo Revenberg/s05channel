@@ -63,10 +63,9 @@ async def async_setup_entry(
 
     for inverter in hub.inverters:
         entities.append(S05ChannelDevice(inverter, config_entry, coordinator))
-#        entities.append(Version(inverter, config_entry, coordinator))
+        entities.append(S05ChannelSN(inverter, config_entry, coordinator))
         entities.append(S05ChannelStatus(inverter, config_entry, coordinator))
         #entities.append(StatusVendor(inverter, config_entry, coordinator))
-        entities.append(S05ChannelPort(inverter, config_entry, coordinator))
         entities.append(S05ChannelPort(inverter, config_entry, coordinator, "1"))
         entities.append(S05ChannelPort(inverter, config_entry, coordinator, "2"))
         entities.append(S05ChannelPort(inverter, config_entry, coordinator, "3"))
@@ -168,32 +167,32 @@ class S05ChannelDevice(S05ChannelSensorBase):
         return attrs
 
 
-#class Version(S05ChannelSensorBase):
-#    """Version."""
+class S05ChannelSN(S05ChannelSensorBase):
+    """S05ChannelSN."""
 
-#    entity_category = EntityCategory.DIAGNOSTIC
+    entity_category = EntityCategory.DIAGNOSTIC
 
-#    def __init__(self, platform, config_entry, coordinator):
-#        """Initialize the sensor."""
-#        super().__init__(platform, config_entry, coordinator)
+    def __init__(self, platform, config_entry, coordinator):
+        """Initialize the sensor."""
+        super().__init__(platform, config_entry, coordinator)
 
-#    @property
-#    def unique_id(self) -> str:
-#        """unique_id."""
+    @property
+    def unique_id(self) -> str:
+        """unique_id."""
 
-#        return f"{self._platform.uid_base}_version"
+        return f"{self._platform.uid_base}_S05ChannelSN"
 
-#    @property
-#    def name(self) -> str:
-#        """Name."""
+    @property
+    def name(self) -> str:
+        """Name."""
 
-#        return "Version"
+        return "S05ChannelSN"
 
-#    @property
-#    def native_value(self):
-#        """native_value."""
-
-#        return self._platform.fw_version
+    @property
+    def native_value(self):
+        """native_value."""
+    
+        return self._platform.decoded_model["SN"]
 
 class S05ChannelPort(S05ChannelSensorBase):
     """S05ChannelPort."""
