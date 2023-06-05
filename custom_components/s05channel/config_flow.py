@@ -3,12 +3,12 @@ import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_HOST, CONF_NAME, CONF_SCAN_INTERVAL, HOST
+from homeassistant.const import CONF_HOST, CONF_NAME, CONF_SCAN_INTERVAL
 # CONF_PORT
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.data_entry_flow import FlowResult
 
-from .const import DEFAULT_NAME, DOMAIN, ConfDefaultInt
+from .const import DEFAULT_NAME, DOMAIN, ConfDefaultInt, DEFAULT_HOST
 
 @callback
 def s05channel_multi_entries(hass: HomeAssistant):
@@ -52,7 +52,7 @@ class S05ChannelMultiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         else:
             user_input = {
                 CONF_NAME: DEFAULT_NAME,
-                CONF_HOST: HOST
+                CONF_HOST: DEFAULT_HOST
 #                ConfName.NUMBER_INVERTERS: ConfDefaultInt.NUMBER_INVERTERS,
 #                ConfName.DEVICE_ID: ConfDefaultInt.DEVICE_ID,
             }

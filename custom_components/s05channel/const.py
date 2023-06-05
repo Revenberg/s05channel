@@ -13,7 +13,7 @@ CONF_MANUAL_PATH = "Enter Manually"
 CONF_SCAN_INTERVAL = 60
 
 
-HOST = "/dev/ttyACM0"
+DEFAULT_HOST = "/dev/ttyACM0"
 
 class RetrySettings(IntEnum):
     """Retry settings when opening a connection to the inverter fails."""
