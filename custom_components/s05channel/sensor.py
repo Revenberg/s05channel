@@ -157,6 +157,7 @@ class S05ChannelDevice(S05ChannelSensorBase):
 
         attrs["device_id"] = self._platform.device_address
         attrs["manufacturer"] = self._platform.manufacturer
+        attrs["device_address"] = self._platform.device_address
         attrs["model"] = self._platform.model
 
         if self._platform.has_parent:
@@ -312,58 +313,3 @@ class S05ChannelStatus(S05ChannelStatusSensor):
 
         _LOGGER.debug(attrs)
         return attrs
-
-#class StatusVendor(S05ChannelSensorBase):
-#    """StatusVendor."""
-
-#    device_class = SensorDeviceClass.ENUM
-#    entity_category = EntityCategory.DIAGNOSTIC
-#    options = list(DEVICE_STATUS_TEXT.values())
-
-#    def __init__(self, platform, config_entry, coordinator):
-#        """Initialize the sensor."""
-
-#        super().__init__(platform, config_entry, coordinator)
-
-#    @property
-#    def unique_id(self) -> str:
-#        """unique_id."""
-
-#        return f"{self._platform.uid_base}_status_vendor"
-
-#    @property
-#    def name(self) -> str:
-#        """NAme."""
-
-#        return "Status Vendor"
-
-#    @property
-#    def native_value(self):
-#        """native_value."""
-
-#        _LOGGER.debug("i_status_vendor")
-#        _LOGGER.debug(self._platform.decoded_model["i_status_vendor"])
-#        _LOGGER.debug(DEVICE_STATUS_TEXT[self._platform.decoded_model["i_status_vendor"]])
-
-#        return DEVICE_STATUS_TEXT[self._platform.decoded_model["i_status_vendor"]]
-#        return "Running"
-
-#    @property
-#    def extra_state_attributes(self):
-#        """extra_state_attributes."""
-
-#        attrs = {}
-#        _LOGGER.debug("i_status_vendor extra_state_attributes")
-
-#        try:
-#            if self._platform.decoded_model["i_status_vendor"] in DEVICE_STATUS_TEXT:
-#                _LOGGER.debug("3")
-#                attrs["status_text"] = DEVICE_STATUS_TEXT[
-#                    self._platform.decoded_model["i_status_vendor"]
-#                ]
-#                attrs["status_value"] = self._platform.decoded_model["i_status_vendor"]
-
-#        except KeyError:
-#            pass
-#        _LOGGER.debug(attrs)
-#        return attrs

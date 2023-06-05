@@ -225,37 +225,25 @@ class S05ChannelInverter:
         _LOGGER.debug("init_device")
         self.read_s05channel_data_common()
 
-        #self.manufacturer = self.decoded_common["C_Manufacturer"]
         self.manufacturer = "S05Channel"
-        #self.model = self.decoded_common["C_Model"]
         self.model = "S05 Channel"
-        #self.option = self.decoded_common["C_Option"]
-        #self.fw_version = self.decoded_common["C_Version"]
 
-        #self.fw_version = self.decoded_common["C_S0_ID"]
-        #self.serial = self.decoded_common["C_SerialNumber"]
         self.serial = self.decoded_common["SN"]
         self.device_address = f"{self.hub._device}"
 
-        #self.name = f"{self.hub.hub_id.capitalize()} I{self.inverter_unit_id}"
         h = self.decoded_common["SN"]
         self.uid_base = f"{self.hub.hub_id.capitalize()} I{h}"
 
         self._device_info = {
             "identifiers": {(DOMAIN, int(self.decoded_common["SN"]))},
-            "name": self.device_address,
+            "name": self.decoded_common["SN"],
+            "device_address": self.device_address,
             "manufacturer": "S05Channel",
             "model": self.model,
-#            "sw_version": self.fw_version,
-            #"hw_version": self.option,
         }
-
-#    def round(self, floatval):
-#        return round(floatval, 2)
 
     def read_s05channel_data_common(self) -> None:
         """Set common."""
-        #_LOGGER.debug("read_s05channel_data")
 
         try:
             self.hub.connect()
