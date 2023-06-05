@@ -9,7 +9,6 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     CONF_HOST,
     CONF_NAME,
-    CONF_PORT,
     CONF_SCAN_INTERVAL,
     Platform,
 )
@@ -47,8 +46,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     s05channel_hub = S05ChannelMultiHub(
         hass,
         entry.data[CONF_NAME],
-        entry.data[CONF_HOST],
-        entry.data[CONF_PORT],
+        entry.data[CONF_HOST]
     )
 
     coordinator = S05ChannelCoordinator(
