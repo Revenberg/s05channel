@@ -260,6 +260,12 @@ class S05ChannelInverter:
             self._online = False
             raise s05channelReadError(f"{e}")
 
+        self.decoded_common = OrderedDict(
+            [
+                ("C_SunSpec_DID", "1.0.0"),
+                ("SN", "11111111111111111"),
+            ]
+        )
 
     def read_s05channel_data(self) -> None:
         """Read data."""
