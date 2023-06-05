@@ -283,7 +283,7 @@ class S05ChannelInverter:
             raise s05channelReadError(f"{e}")
 
         try:
-            line = self._client.readline()
+            line = self.hub._client.readline()
             _LOGGER.info(line)
             _LOGGER.debug("=============================================================")
             _LOGGER.info(line.decode("utf-8") )
