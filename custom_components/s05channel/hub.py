@@ -262,7 +262,7 @@ class S05ChannelInverter:
 
         self.decoded_common = OrderedDict(
             [
-                ("C_SunSpec_DID", "1.0.0"),
+                ("C_SunSpec_DID", "1"),
                 ("SN", "11111111111111111"),
             ]
         )
