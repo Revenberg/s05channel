@@ -197,6 +197,7 @@ class Version(S05ChannelSensorBase):
 
 class S05ChannelPort(S05ChannelSensorBase):
     """S05ChannelPort."""
+    
     device_class = SensorDeviceClass.ENERGY
     state_class = SensorStateClass.TOTAL_INCREASING
     native_unit_of_measurement = UnitOfEnergy.KILO_WATT_HOUR
