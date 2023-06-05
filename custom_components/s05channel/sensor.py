@@ -191,7 +191,7 @@ class S05ChannelSN(S05ChannelSensorBase):
     @property
     def native_value(self):
         """native_value."""
-    
+
         return self._platform.decoded_model["SN"]
 
 class S05ChannelPort(S05ChannelSensorBase):
