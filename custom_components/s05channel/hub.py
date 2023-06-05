@@ -272,36 +272,36 @@ class S05ChannelInverter:
         # _LOGGER.debug("read_s05channel_data")
 
         try:
-              line = self._instrument.readline()
+            line = self._client.readline()
+            _LOGGER.info(line)
+            #_LOGGER.debug("=============================================================")
+            _LOGGER.info(line.decode("utf-8") )
+            values = line.decode("utf-8").split(":")
+            _LOGGER.info(values[1])
+            _LOGGER.info(values[6])
+            _LOGGER.info(values[9])
+            _LOGGER.info(values[12])
+            _LOGGER.info(values[15])
+            _LOGGER.info(values[18])
+            _LOGGER.info( values )
+
+            self.decoded_model = OrderedDict(
+                [
+                    ("p", values[1]),
+                    ("p1", values[6]),
+                    ("p2", values[9]),
+                    ("p3", values[11]),
+                    ("p4", values[15]),
+                    ("p5", values[18]),
+                ]
+            )
+
+            self.hub._online = True
+            _LOGGER.debug(f"Inverter: {self.decoded_model}")
         except Exception as e:
               _LOGGER.error(f'exception: {e}')
               #print(traceback.format_exc())
             #_LOGGER.debug("==================== line =========================================")
-        _LOGGER.info(line)
-        #_LOGGER.debug("=============================================================")
-        _LOGGER.info(line.decode("utf-8") )
-        values = line.decode("utf-8").split(":")
-        _LOGGER.info(values[1])
-        _LOGGER.info(values[6])
-        _LOGGER.info(values[9])
-        _LOGGER.info(values[12])
-        _LOGGER.info(values[15])
-        _LOGGER.info(values[18])
-        _LOGGER.info( values )
-
-        self.decoded_model = OrderedDict(
-            [
-                ("p", values[1]),
-                ("p1", values[6]),
-                ("p2", values[9]),
-                ("p3", values[11]),
-                ("p4", values[15]),
-                ("p5", values[18]),
-            ]
-        )
-
-        self.hub._online = True
-        _LOGGER.debug(f"Inverter: {self.decoded_model}")
 
     @property
     def online(self) -> bool:
