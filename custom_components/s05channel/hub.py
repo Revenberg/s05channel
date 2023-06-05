@@ -231,7 +231,7 @@ class S05ChannelInverter:
         self.fw_version = self.decoded_common["C_SunSpec_DID"]
         #self.serial = self.decoded_common["C_SerialNumber"]
         self.serial = self.decoded_common["SN"]
-        self.device_address = f"{self.hub._host}"
+        self.device_address = f"{self.hub._device}"
 
         #self.name = f"{self.hub.hub_id.capitalize()} I{self.inverter_unit_id}"
         self.uid_base = f"{self.hub.hub_id.capitalize()} I"
