@@ -187,6 +187,10 @@ class S05ChannelMultiHub:
                   stopbits=serial.STOPBITS_ONE
             )
 
+    def readline(self):
+        """Readline."""
+        self._client.readline()
+
     def is_socket_open(self) -> bool:
         """Check s05channel client connection status."""
         if self._client is None:
@@ -272,9 +276,16 @@ class S05ChannelInverter:
         # _LOGGER.debug("read_s05channel_data")
 
         try:
+            self.hub.connect()
+        except ConnectionException as e:
+            _LOGGER.error(f"Connection error: {e}")
+            self._online = False
+            raise s05channelReadError(f"{e}")
+
+        try:
             line = self._client.readline()
             _LOGGER.info(line)
-            #_LOGGER.debug("=============================================================")
+            _LOGGER.debug("=============================================================")
             _LOGGER.info(line.decode("utf-8") )
             values = line.decode("utf-8").split(":")
             _LOGGER.info(values[1])
@@ -299,7 +310,8 @@ class S05ChannelInverter:
             self.hub._online = True
             _LOGGER.debug(f"Inverter: {self.decoded_model}")
         except Exception as e:
-              _LOGGER.error(f'exception: {e}')
+            _LOGGER.debug("==================== line =========================================")
+            _LOGGER.error(f'exception: {e}')
               #print(traceback.format_exc())
             #_LOGGER.debug("==================== line =========================================")
 
