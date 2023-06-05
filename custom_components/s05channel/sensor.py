@@ -9,17 +9,17 @@ from homeassistant.components.sensor import (
     SensorStateClass,
 )
 from homeassistant.config_entries import ConfigEntry
-#from homeassistant.const import (
+from homeassistant.const import (
 #    PERCENTAGE,
 #    POWER_VOLT_AMPERE_REACTIVE,
 #    UnitOfApparentPower,
 #    UnitOfElectricCurrent,
 #    UnitOfElectricPotential,
-#    UnitOfEnergy,
+    UnitOfEnergy,
 #    UnitOfFrequency,
 #    UnitOfPower,
 #    UnitOfTemperature,
-#)
+)
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity import EntityCategory
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -197,11 +197,10 @@ class Version(S05ChannelSensorBase):
 
 class S05ChannelPort(S05ChannelSensorBase):
     """S05ChannelPort."""
-
-#    device_class = SensorDeviceClass.CURRENT
-    state_class = SensorStateClass.MEASUREMENT
-#    native_unit_of_measurement = UnitOfElectricCurrent.AMPERE
-    suggested_display_precision = 1
+    device_class = SensorDeviceClass.ENERGY
+    state_class = SensorStateClass.TOTAL_INCREASING
+    native_unit_of_measurement = UnitOfEnergy.KILO_WATT_HOUR
+    suggested_display_precision = 0
 
     def __init__(self, platform, config_entry, coordinator, port: str = None):
         """Initialize the sensor."""
