@@ -15,9 +15,9 @@ from homeassistant.const import (
 #    UnitOfApparentPower,
 #    UnitOfElectricCurrent,
 #    UnitOfElectricPotential,
-#    UnitOfEnergy,
+    UnitOfEnergy,
 #    UnitOfFrequency,
-    UnitOfPower,
+#    UnitOfPower,
 #    UnitOfTemperature,
 )
 from homeassistant.core import HomeAssistant, callback
