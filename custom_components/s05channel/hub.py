@@ -233,7 +233,7 @@ class S05ChannelInverter:
         self.serial = self.decoded_common["SN"]
         self.device_address = f"{self.hub._device}"
 
-        h = self.decoded_common["SN"]
+        h = self.hub._device.replace("/", "_")
         self.uid_base = f"{self.hub.hub_id.capitalize()} I{h}"
 
         self._device_info = {

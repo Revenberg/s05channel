@@ -64,6 +64,7 @@ async def async_setup_entry(
     for inverter in hub.inverters:
         entities.append(S05ChannelDevice(inverter, config_entry, coordinator))
         entities.append(S05ChannelSN(inverter, config_entry, coordinator))
+        entities.append(S05ChannelPath(inverter, config_entry, coordinator))
         entities.append(S05ChannelStatus(inverter, config_entry, coordinator))
         #entities.append(StatusVendor(inverter, config_entry, coordinator))
         entities.append(S05ChannelPort(inverter, config_entry, coordinator, "1"))
@@ -194,6 +195,33 @@ class S05ChannelSN(S05ChannelSensorBase):
         """native_value."""
 
         return self._platform.decoded_model["SN"]
+
+class S05ChannelPath(S05ChannelSensorBase):
+    """S05ChannelPath."""
+
+    entity_category = EntityCategory.DIAGNOSTIC
+
+    def __init__(self, platform, config_entry, coordinator):
+        """Initialize the sensor."""
+        super().__init__(platform, config_entry, coordinator)
+
+    @property
+    def unique_id(self) -> str:
+        """unique_id."""
+
+        return f"{self._platform.uid_base}_S05ChannelPath"
+
+    @property
+    def name(self) -> str:
+        """Name."""
+
+        return "Channel Path"
+
+    @property
+    def native_value(self):
+        """native_value."""
+
+        return self._platform.decoded_model["device_address"]
 
 class S05ChannelPort(S05ChannelSensorBase):
     """S05ChannelPort."""
