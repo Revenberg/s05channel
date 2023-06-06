@@ -176,6 +176,8 @@ class S05ChannelMultiHub:
 
     async def connect(self) -> None:
         """Connect s05channel client."""
+        _LOGGER.debug("connect")
+        _LOGGER.debug(self._device)
         if self._client is None:
             BAUDRATE = 9600
             self._client = serial.Serial(
