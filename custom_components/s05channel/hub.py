@@ -235,6 +235,8 @@ class S05ChannelInverter:
 
         h = self.hub._device.replace("/", "_")
         self.uid_base = f"{self.hub.hub_id.capitalize()} I{h}"
+        _LOGGER.debug(elf.hub._device)
+        _LOGGER.debug(self.uid_base)
 
         self._device_info = {
             "identifiers": {(DOMAIN, int(self.decoded_common["SN"]))},
