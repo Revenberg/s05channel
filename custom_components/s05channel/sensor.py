@@ -221,6 +221,9 @@ class S05ChannelPath(S05ChannelSensorBase):
     def native_value(self):
         """native_value."""
 
+        _LOGGER.debug("native_value ...1...")
+        _LOGGER.debug(self._platform.decoded_model)
+
         return self._platform.decoded_model["device_address"]
 
 class S05ChannelPort(S05ChannelSensorBase):
