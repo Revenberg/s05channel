@@ -232,7 +232,7 @@ class S05ChannelInverter:
         _LOGGER.debug(self.decoded_common)
         self.serial = self.decoded_common["SN"]
         _LOGGER.debug("------------------22----------------------------------------------------")
-        self.device_address = f"{self._device}"
+        self.device_address = f"{self.hub._device}"
         _LOGGER.debug("------------------33----------------------------------------------------")
 
         h = self.hub._device.replace("/", "_")
@@ -252,7 +252,6 @@ class S05ChannelInverter:
     def read_s05channel_data_common(self) -> None:
         """Set common."""
 
-        print( self.hub._device )
         try:
             self.hub.connect()
         except ConnectionException as e:
