@@ -236,7 +236,7 @@ class S05ChannelInverter:
         _LOGGER.debug("------------------22----------------------------------------------------")
         self.device_address = f"{self.hub._device}"
         _LOGGER.debug("------------------33----------------------------------------------------")
-        
+
         h = self.hub._device.replace("/", "_")
         self.uid_base = f"{self.hub.hub_id.capitalize()} I{h}"
         _LOGGER.debug(self.hub._device)
