@@ -289,7 +289,7 @@ class S05ChannelInverter:
         try:
             line = self.hub._client.readline()
             _LOGGER.info(line)
-            
+
             if (line != ""):
                 _LOGGER.debug("===================== read_s05channel_data ========================================")
                 _LOGGER.info(line.decode("utf-8") )
@@ -324,7 +324,7 @@ class S05ChannelInverter:
                         ("status", "Stopped"),
                     ]
                 )
-                
+
         except Exception as e:
             _LOGGER.debug("==================== line Exception =========================================")
             _LOGGER.error(f'exception: {e}')
