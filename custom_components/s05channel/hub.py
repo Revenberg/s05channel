@@ -190,8 +190,11 @@ class S05ChannelMultiHub:
                   stopbits=serial.STOPBITS_ONE
             )
 
-    def readline(self):
+    async  def readline(self) -> None:
         """Readline."""
+        
+        _LOGGER.debug("readline")
+        self.connect()
         self._client.readline()
 
     def is_socket_open(self) -> bool:
