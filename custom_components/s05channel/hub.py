@@ -288,32 +288,42 @@ class S05ChannelInverter:
         try:
             line = self.hub._client.readline()
             _LOGGER.info(line)
-            _LOGGER.debug("===================== read_s05channel_data ========================================")
-            _LOGGER.info(line.decode("utf-8") )
-            values = line.decode("utf-8").split(":")
-            _LOGGER.info(values[1])
-            _LOGGER.info(values[6])
-            _LOGGER.info(values[9])
-            _LOGGER.info(values[12])
-            _LOGGER.info(values[15])
-            _LOGGER.info(values[18])
-            _LOGGER.info( values )
+            
+            if (line != ""):
+                _LOGGER.debug("===================== read_s05channel_data ========================================")
+                _LOGGER.info(line.decode("utf-8") )
+                values = line.decode("utf-8").split(":")
+                _LOGGER.info(values[1])
+                _LOGGER.info(values[6])
+                _LOGGER.info(values[9])
+                _LOGGER.info(values[12])
+                _LOGGER.info(values[15])
+                _LOGGER.info(values[18])
+                _LOGGER.info( values )
 
-            self.decoded_model = OrderedDict(
-                [
-                    ("status", "Running"),
-                    ("SN", values[1]),
-                    ("p1", values[6]),
-                    ("p2", values[9]),
-                    ("p3", values[11]),
-                    ("p4", values[15]),
-                    ("p5", values[18]),
-                    ("device_address", self.device_address),
-                ]
-            )
+                self.decoded_model = OrderedDict(
+                    [
+                        ("status", "Running"),
+                        ("SN", values[1]),
+                        ("p1", values[6]),
+                        ("p2", values[9]),
+                        ("p3", values[11]),
+                        ("p4", values[15]),
+                        ("p5", values[18]),
+                        ("device_address", self.device_address),
+                    ]
+                )
 
-            self.hub._online = True
-            _LOGGER.debug(f"Inverter: {self.decoded_model}")
+                self.hub._online = True
+                _LOGGER.debug(f"Inverter: {self.decoded_model}")
+            else:
+                self.hub._online = False
+                self.decoded_model = OrderedDict(
+                    [
+                        ("status", "Stopped"),
+                    ]
+                )
+                
         except Exception as e:
             _LOGGER.debug("==================== line Exception =========================================")
             _LOGGER.error(f'exception: {e}')
