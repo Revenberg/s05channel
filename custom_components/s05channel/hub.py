@@ -95,7 +95,7 @@ class S05ChannelMultiHub:
             self.inverters.append(new_inverter)
 
         except s05channelReadError as e:
-            _LOGGER.debug("---------------1-- -------------------------")
+            _LOGGER.debug("---------------1- 2 - -------------------------")
             raise HubInitFailed(f"{e}")
 
         except DeviceInvalid as e:
