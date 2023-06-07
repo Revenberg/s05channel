@@ -308,12 +308,12 @@ class S05ChannelInverter:
                 self.decoded_model = OrderedDict(
                     [
                         ("status", "Running"),
-                        ("SN", values[1]),
-                        ("p1", values[6]),
-                        ("p2", values[9]),
-                        ("p3", values[11]),
-                        ("p4", values[15]),
-                        ("p5", values[18]),
+                        ("SN", int(values[1])),
+                        ("p1", int(values[6])),
+                        ("p2", int(values[9])),
+                        ("p3", int(values[11])),
+                        ("p4", int(values[15])),
+                        ("p5", int(values[18])),
 #                        ("device_address", F"overbodig {self.device_address}"),
                     ]
                 )
