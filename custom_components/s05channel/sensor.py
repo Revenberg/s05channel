@@ -195,7 +195,7 @@ class S05ChannelSN(S05ChannelSensorBase):
     def native_value(self):
         """native_value."""
 
-        return self._platform.decoded_model["SN"]
+        return self._platform.decoded_common["SN"]
 
 class S05ChannelPath(S05ChannelSensorBase):
     """S05ChannelPath."""
