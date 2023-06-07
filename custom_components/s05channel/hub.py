@@ -246,7 +246,7 @@ class S05ChannelInverter:
             "identifiers": {(DOMAIN, int(self.decoded_common["SN"]))},
             "name": self.device_address,
             "sn": self.decoded_common["SN"],
-            "device_address": self.device_address,
+            "device_address": self.device_id,
             "manufacturer": "S05Channel",
             "model": self.model,
         }
@@ -272,7 +272,7 @@ class S05ChannelInverter:
             self.decoded_common = OrderedDict(
                 [
                     ("SN", values[1]),
-                    ("device_address", self.hub.device_address),
+                    ("device_address", self.device_id),
                 ]
             )
         except Exception as e:
