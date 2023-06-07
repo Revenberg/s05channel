@@ -220,6 +220,7 @@ class S05ChannelInverter:
         self.global_power_control = None
         self.manufacturer = "S05Channel"
         self._delta_energy = 0
+        device_id = ""
 
     def init_device(self) -> None:
         """init_device."""
