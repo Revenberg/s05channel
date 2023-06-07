@@ -258,6 +258,7 @@ class S05ChannelInverter:
 
         try:
             _LOGGER.debug("==================== 10common =========================================")
+            _LOGGER.info(self.hub)
             line = self.hub.readline()
             _LOGGER.info(line)
             _LOGGER.debug("==================== 11common =========================================")
