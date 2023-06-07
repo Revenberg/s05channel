@@ -218,7 +218,7 @@ class S05ChannelInverter:
         self.has_parent = False
         self.global_power_control = None
         self.manufacturer = "S05Channel"
-        
+
     def init_device(self) -> None:
         """init_device."""
 
