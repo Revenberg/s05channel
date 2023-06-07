@@ -190,9 +190,9 @@ class S05ChannelMultiHub:
                   stopbits=serial.STOPBITS_ONE
             )
 
-    async  def readline(self) -> None:
+    async def readline(self) -> None:
         """Readline."""
-        
+
         _LOGGER.debug("readline")
         self.connect()
         self._client.readline()
@@ -255,13 +255,6 @@ class S05ChannelInverter:
 
     def read_s05channel_data_common(self) -> None:
         """Set common."""
-
-        try:
-            self.hub.connect()
-        except ConnectionException as e:
-            _LOGGER.error(f"Connection error: {e}")
-            self._online = False
-            raise s05channelReadError(f"{e}")
 
         try:
             _LOGGER.debug("==================== 10common =========================================")
