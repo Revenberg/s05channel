@@ -156,6 +156,7 @@ class S05ChannelDevice(S05ChannelSensorBase):
 
         attrs = {}
 
+        _LOGGER.debug("native_value ...2...")
         attrs["device_id"] = self._platform.device_address
         attrs["manufacturer"] = self._platform.manufacturer
         attrs["device_address"] = self._platform.device_address
