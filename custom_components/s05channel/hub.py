@@ -230,6 +230,7 @@ class S05ChannelInverter:
         self.manufacturer = "S05Channel"
         self.model = "S05 Channel"
 
+        _LOGGER.debug(self.decoded_common)
         self.serial = self.decoded_common["SN"]
         self.device_address = f"{self.hub._device}"
 
@@ -272,7 +273,7 @@ class S05ChannelInverter:
                 ]
             )
         except Exception as e:
-            _LOGGER.debug("==================== common Exception =========================================")
+            _LOGGER.debug("==================== common Exception 1=========================================")
             _LOGGER.error(f'exception: {e}')
 
     def read_s05channel_data(self) -> None:
@@ -311,7 +312,7 @@ class S05ChannelInverter:
                         ("p3", values[11]),
                         ("p4", values[15]),
                         ("p5", values[18]),
-                        ("device_address", F"overbodig {self.device_address}"),
+#                        ("device_address", F"overbodig {self.device_address}"),
                     ]
                 )
 
