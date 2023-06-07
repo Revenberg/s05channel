@@ -208,7 +208,6 @@ class S05ChannelMultiHub:
 class S05ChannelInverter:
     """S05ChannelInverter."""
 
-    _delta_energy = 0
     def __init__(self, device_id: int, hub: S05ChannelMultiHub) -> None:
         """Init."""
 
@@ -219,9 +218,7 @@ class S05ChannelInverter:
         self.has_parent = False
         self.global_power_control = None
         self.manufacturer = "S05Channel"
-        self._delta_energy = 0
-        device_id = ""
-
+        
     def init_device(self) -> None:
         """init_device."""
 
@@ -235,7 +232,7 @@ class S05ChannelInverter:
         _LOGGER.debug(self.decoded_common)
         self.serial = self.decoded_common["SN"]
         _LOGGER.debug("------------------22----------------------------------------------------")
-        self.device_address = f"{self.hub._device}"
+        self.device_address = f"{self._device}"
         _LOGGER.debug("------------------33----------------------------------------------------")
 
         h = self.hub._device.replace("/", "_")
@@ -247,7 +244,7 @@ class S05ChannelInverter:
             "identifiers": {(DOMAIN, int(self.decoded_common["SN"]))},
             "name": self.device_address,
             "sn": self.decoded_common["SN"],
-            "device_address": self.device_id,
+            "device_address": self._device_id,
             "manufacturer": "S05Channel",
             "model": self.model,
         }
@@ -255,6 +252,7 @@ class S05ChannelInverter:
     def read_s05channel_data_common(self) -> None:
         """Set common."""
 
+        print( self.hub._device )
         try:
             self.hub.connect()
         except ConnectionException as e:
@@ -265,19 +263,20 @@ class S05ChannelInverter:
         try:
             line = self.hub._client.readline()
             _LOGGER.info(line)
-            _LOGGER.debug("==================== common =========================================")
+            _LOGGER.debug("==================== 11common =========================================")
             _LOGGER.info(line.decode("utf-8") )
+            _LOGGER.debug("==================== 12common =========================================")
             values = line.decode("utf-8").split(":")
             _LOGGER.info(values[1])
 
             self.decoded_common = OrderedDict(
                 [
                     ("SN", values[1]),
-                    ("device_address", self.device_id),
+                    ("device_address", self.hub._device),
                 ]
             )
         except Exception as e:
-            _LOGGER.debug("==================== common Exception 1=========================================")
+            _LOGGER.debug("==================== common Exception 13=========================================")
             _LOGGER.error(f'exception: {e}')
 
     def read_s05channel_data(self) -> None:
