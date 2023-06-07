@@ -262,7 +262,7 @@ class S05ChannelInverter:
 
         try:
             _LOGGER.debug("==================== 10common =========================================")
-            line = self.hub._client.readline()
+            line = self.hub.readline()
             _LOGGER.info(line)
             _LOGGER.debug("==================== 11common =========================================")
             _LOGGER.info(line.decode("utf-8") )
@@ -292,7 +292,7 @@ class S05ChannelInverter:
             raise s05channelReadError(f"{e}")
 
         try:
-            line = self.hub._client.readline()
+            line = self.hub.readline()
             _LOGGER.info(line)
 
             if (line != ""):
