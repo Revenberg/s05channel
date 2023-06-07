@@ -192,15 +192,6 @@ class S05ChannelMultiHub:
 
     def readline(self):
         """Readline."""
-        try:
-            _LOGGER.error("self.connect()")
-            self.connect()
-        except ConnectionException as e:
-            _LOGGER.error(f"Connection error: {e}")
-            self._online = False
-            raise s05channelReadError(f"{e}")
-
-        _LOGGER.error("self._client.readline()")
         self._client.readline()
 
     def is_socket_open(self) -> bool:
@@ -263,7 +254,14 @@ class S05ChannelInverter:
         """Set common."""
 
         try:
-            line = self.hub.readline()
+            self.hub.connect()
+        except ConnectionException as e:
+            _LOGGER.error(f"Connection error: {e}")
+            self._online = False
+            raise s05channelReadError(f"{e}")
+
+        try:
+            line = self.hub._client.readline()
             _LOGGER.info(line)
             _LOGGER.debug("==================== 11common =========================================")
             _LOGGER.info(line.decode("utf-8") )
@@ -286,7 +284,14 @@ class S05ChannelInverter:
         # _LOGGER.debug("read_s05channel_data")
 
         try:
-            line = self.hub.readline()
+            self.hub.connect()
+        except ConnectionException as e:
+            _LOGGER.error(f"Connection error: {e}")
+            self._online = False
+            raise s05channelReadError(f"{e}")
+
+        try:
+            line = self.hub._client.readline()
             _LOGGER.info(line)
 
             if (line != ""):
