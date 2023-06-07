@@ -85,7 +85,7 @@ class S05ChannelMultiHub:
         self._online = False
 
     async def _async_init_s05channel(self) -> None:
-        """Async_init_s05channel."""
+        """Async init s05channel."""
 
         inverter_unit_id = 1
 
