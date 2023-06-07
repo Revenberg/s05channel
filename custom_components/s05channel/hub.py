@@ -193,7 +193,7 @@ class S05ChannelMultiHub:
         """Readline."""
 
         _LOGGER.debug("readline")
-        self.connect()
+        await self.connect()
         return self._client.readline()
 
     def is_socket_open(self) -> bool:
