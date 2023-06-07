@@ -230,10 +230,13 @@ class S05ChannelInverter:
         self.manufacturer = "S05Channel"
         self.model = "S05 Channel"
 
+        _LOGGER.debug("------------------11----------------------------------------------------")
         _LOGGER.debug(self.decoded_common)
         self.serial = self.decoded_common["SN"]
+        _LOGGER.debug("------------------22----------------------------------------------------")
         self.device_address = f"{self.hub._device}"
-
+        _LOGGER.debug("------------------33----------------------------------------------------")
+        
         h = self.hub._device.replace("/", "_")
         self.uid_base = f"{self.hub.hub_id.capitalize()} I{h}"
         _LOGGER.debug(self.hub._device)
