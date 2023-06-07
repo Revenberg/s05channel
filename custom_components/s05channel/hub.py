@@ -194,7 +194,7 @@ class S05ChannelMultiHub:
 
         _LOGGER.debug("readline")
         await self.connect()
-        
+
         line = self._client.readline()
         _LOGGER.debug(line)
         return line
