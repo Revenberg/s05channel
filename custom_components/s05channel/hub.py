@@ -263,7 +263,7 @@ class S05ChannelInverter:
         """Set common."""
 
         try:
-            line = self.hub._client.readline()
+            line = self.hub.readline()
             _LOGGER.info(line)
             _LOGGER.debug("==================== 11common =========================================")
             _LOGGER.info(line.decode("utf-8") )
@@ -286,7 +286,7 @@ class S05ChannelInverter:
         # _LOGGER.debug("read_s05channel_data")
 
         try:
-            line = self.hub._client.readline()
+            line = self.hub.readline()
             _LOGGER.info(line)
 
             if (line != ""):
