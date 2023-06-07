@@ -244,7 +244,7 @@ class S05ChannelInverter:
             "identifiers": {(DOMAIN, int(self.decoded_common["SN"]))},
             "name": self.device_address,
             "sn": self.decoded_common["SN"],
-            "device_address": self.hub._device_id,
+            "device_address": self.hub._device,
             "manufacturer": "S05Channel",
             "model": self.model,
         }
