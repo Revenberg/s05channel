@@ -189,6 +189,7 @@ class S05ChannelMultiHub:
                   stopbits=serial.STOPBITS_ONE
             )
 
+    @property
     def readline(self) -> str:
         """Readline."""
 
@@ -262,7 +263,7 @@ class S05ChannelInverter:
         try:
             _LOGGER.debug("==================== 10common =========================================")
             _LOGGER.info(self.hub)
-            line = self.hub.readline()
+            line = self.hub.readline
             _LOGGER.info(line)
             _LOGGER.debug("==================== 11common =========================================")
             _LOGGER.info(line.decode("utf-8") )
@@ -292,7 +293,7 @@ class S05ChannelInverter:
             raise s05channelReadError(f"{e}")
 
         try:
-            line = self.hub.readline()
+            line = self.hub.readline
             _LOGGER.info(line)
 
             if (line != ""):
