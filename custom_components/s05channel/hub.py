@@ -190,14 +190,14 @@ class S05ChannelMultiHub:
             )
 
     @property
-    async def readline(self) -> str:
+    def readline(self) -> str:
         """Readline."""
 
         _LOGGER.debug("readline")
-        await self.connect()
+        self.connect()
 
         _LOGGER.debug("read")
-        line = await self._client.readline()
+        line = self._client.readline()
         _LOGGER.debug(line)
         return line
 
