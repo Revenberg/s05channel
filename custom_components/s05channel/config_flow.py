@@ -36,7 +36,8 @@ class S05ChannelMultiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             return True
         return False
 
-    async def async_step_user(self, user_input=None):
+    #async 
+    def async_step_user(self, user_input=None):
         """Handle the initial step."""
         errors = {}
 
@@ -44,7 +45,8 @@ class S05ChannelMultiConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             if self._host_in_configuration_exists(user_input[CONF_HOST]):
                 errors[CONF_HOST] = "already_configured"
             else:
-                await self.async_set_unique_id(user_input[CONF_HOST])
+                #await 
+                self.async_set_unique_id(user_input[CONF_HOST])
                 self._abort_if_unique_id_configured()
                 return self.async_create_entry(
                     title=user_input[CONF_NAME], data=user_input
@@ -82,7 +84,8 @@ class S05ChannelMultiOptionsFlowHandler(config_entries.OptionsFlow):
         """Initialize options flow."""
         self.config_entry = config_entry
 
-    async def async_step_init(self, user_input=None) -> FlowResult:
+    #async 
+    def async_step_init(self, user_input=None) -> FlowResult:
         """async_step_init."""
 
         errors = {}
