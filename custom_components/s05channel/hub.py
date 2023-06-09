@@ -121,14 +121,14 @@ class S05ChannelMultiHub:
 
         self.initalized = True
 
-    def async_refresh_s05channel_data(self, _now: Optional[int] = None) -> bool:
+    async def async_refresh_s05channel_data(self, _now: Optional[int] = None) -> bool:
         """async_refresh_s05channel_data."""
         if not self.is_socket_open():
-            self.connect()
+            await self.connect()
 
         if not self.initalized:
             try:
-                self._async_init_s05channel()
+                await self._async_init_s05channel()
 
             except ConnectionException as e:
                 raise HubInitFailed(f"Setup failed: {e}")
@@ -136,7 +136,7 @@ class S05ChannelMultiHub:
         self._online = True
         try:
             for inverter in self.inverters:
-                self._hass.async_add_executor_job(inverter.read_s05channel_data)
+                await self._hass.async_add_executor_job(inverter.read_s05channel_data)
 
         except s05channelReadError as e:
             self._online = False
@@ -174,7 +174,7 @@ class S05ChannelMultiHub:
         _LOGGER.debug(f"coordinator timeout is {self._coordinator_timeout}")
         return self._coordinator_timeout
 
-    def connect(self) -> None:
+    async def connect(self) -> None:
         """Connect s05channel client."""
         _LOGGER.debug("connect")
         _LOGGER.debug(self._device)
@@ -189,14 +189,12 @@ class S05ChannelMultiHub:
                   stopbits=serial.STOPBITS_ONE
             )
 
-    @property
-    def readline(self) -> str:
+    async def readline(self) -> str:
         """Readline."""
 
         _LOGGER.debug("readline")
-        self.connect()
+        await self.connect()
 
-        _LOGGER.debug("read")
         line = self._client.readline()
         _LOGGER.debug(line)
         return line
@@ -263,7 +261,7 @@ class S05ChannelInverter:
         try:
             _LOGGER.debug("==================== 10common =========================================")
             _LOGGER.info(self.hub)
-            line = self.hub.readline
+            line = self.hub.readline()
             _LOGGER.info(line)
             _LOGGER.debug("==================== 11common =========================================")
             _LOGGER.info(line.decode("utf-8") )
@@ -293,7 +291,7 @@ class S05ChannelInverter:
             raise s05channelReadError(f"{e}")
 
         try:
-            line = self.hub.readline
+            line = self.hub.readline()
             _LOGGER.info(line)
 
             if (line != ""):
