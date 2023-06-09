@@ -228,7 +228,7 @@ class S05ChannelInverter:
         """Init."""
 
         _LOGGER.debug("S05ChannelInverter")
-        self.inverter_unit_id = device_id
+        self.device_id = device_id
         self.hub = hub
         self.decoded_common = []
         self.decoded_model = []
@@ -267,11 +267,11 @@ class S05ChannelInverter:
             "model": self.model,
         }
 
-    def read_s05channel_data_common(self) -> None:
+    async def read_s05channel_data_common(self) -> None:
         """Set common."""
 
         try:
-            line = self.hub.readline()
+            line = await self.hub.readline()
             _LOGGER.info(line)
             _LOGGER.debug("==================== common =========================================")
             _LOGGER.info(line.decode("utf-8") )
