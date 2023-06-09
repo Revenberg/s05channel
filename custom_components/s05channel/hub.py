@@ -69,6 +69,7 @@ class S05ChannelMultiHub:
         device: str,
     ):
         """Initialize the s05channel hub."""
+        _LOGGER.debug("S05ChannelMultiHub")
         self._hass = hass
         self._name = name
         self._device = device
@@ -212,6 +213,7 @@ class S05ChannelInverter:
     def __init__(self, device_id: int, hub: S05ChannelMultiHub) -> None:
         """Init."""
 
+        _LOGGER.debug("S05ChannelInverter")
         self.inverter_unit_id = device_id
         self.hub = hub
         self.decoded_common = []

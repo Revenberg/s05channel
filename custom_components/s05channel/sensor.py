@@ -56,6 +56,7 @@ async def async_setup_entry(
 ) -> None:
     """async_setup_entry."""
 
+    _LOGGER.debug("async_setup_entry")
     hub = hass.data[DOMAIN][config_entry.entry_id]["hub"]
     coordinator = hass.data[DOMAIN][config_entry.entry_id]["coordinator"]
 
@@ -241,6 +242,7 @@ class S05ChannelPort(S05ChannelSensorBase):
         """Initialize the sensor."""
 
         super().__init__(platform, config_entry, coordinator)
+        _LOGGER.debug("__init__")
         self._port = port
 
     @property
