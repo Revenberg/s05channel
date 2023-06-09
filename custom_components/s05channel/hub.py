@@ -88,6 +88,7 @@ class S05ChannelMultiHub:
     async def _async_init_s05channel(self) -> None:
         """Async init s05channel."""
 
+        _LOGGER.debug("_async_init_s05channel")
         inverter_unit_id = 1
 
         try:
@@ -124,8 +125,7 @@ class S05ChannelMultiHub:
 
     async def async_refresh_s05channel_data(self, _now: Optional[int] = None) -> bool:
         """async_refresh_s05channel_data."""
-        if not self.is_socket_open():
-            await self.connect()
+        await self.connect()
 
         if not self.initalized:
             try:
@@ -190,16 +190,25 @@ class S05ChannelMultiHub:
                   stopbits=serial.STOPBITS_ONE
             )
 
-    def readline(self):
+
+    @property
+    async def readline(self) -> str:
         """Readline."""
-        self._client.readline()
 
-    def is_socket_open(self) -> bool:
-        """Check s05channel client connection status."""
+        _LOGGER.debug("readline")
         if self._client is None:
-            return False
+            await self.connect()
 
-        return True
+        return await self._client.readline()
+
+#    def is_socket_open(self) -> bool:
+#        """Check s05channel client connection status."""
+
+#        _LOGGER.debug("is_socket_open")
+#        if self._client is None:
+#            return False
+
+#        return True
 
     async def shutdown(self) -> None:
         """Shut down the hub."""
