@@ -129,6 +129,8 @@ class S05ChannelMultiHub:
 
     async def async_refresh_s05channel_data(self, _now: Optional[int] = None) -> bool:
         """async_refresh_s05channel_data."""
+
+        _LOGGER.debug("async_refresh_s05channel_data")
         await self.connect()
 
         if not self.initalized:

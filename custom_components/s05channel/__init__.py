@@ -166,11 +166,12 @@ class S05ChannelCoordinator(DataUpdateCoordinator):
     ):
         """Retry refresh until no exception occurs or retries exhaust."""
 
+        _LOGGER.debug("_refresh_s05channel_data_with_retry")
         attempt = 1
         while True:
             try:
                 #return await self._hub.async_refresh_s05channel_data()
-                return self._hub.async_refresh_s05channel_data()
+                return await self._hub.async_refresh_s05channel_data()
             except Exception as ex:
                 if not isinstance(ex, ex_type):
                     raise ex
