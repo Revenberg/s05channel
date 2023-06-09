@@ -31,7 +31,8 @@ PLATFORMS: list[str] = [
 ]
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+#async 
+def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up an Energy Meter."""
     entry_updates: dict[str, Any] = {}
     if CONF_SCAN_INTERVAL in entry.data:
@@ -62,33 +63,41 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         "coordinator": coordinator,
     }
 
-    await coordinator.async_config_entry_first_refresh()
+    #await 
+    coordinator.async_config_entry_first_refresh()
 
-    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    #await 
+    hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
     return True
 
 
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+#async 
+def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
     s05channel_hub = hass.data[DOMAIN][entry.entry_id]["hub"]
-    await s05channel_hub.shutdown()
+    #await 
+    s05channel_hub.shutdown()
 
-    unload_ok = await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+    #unload_ok = await 
+    unload_ok = hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if unload_ok:
         hass.data[DOMAIN].pop(entry.entry_id)
 
     return unload_ok
 
 
-async def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
+#async 
+def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Handle an options update."""
-    await hass.config_entries.async_reload(entry.entry_id)
+    #await 
+    hass.config_entries.async_reload(entry.entry_id)
 
 
-async def async_remove_config_entry_device(
+#async 
+def async_remove_config_entry_device(
     hass: HomeAssistant, config_entry: ConfigEntry, device_entry: DeviceEntry
 ) -> bool:
     """Remove a config entry from a device."""
@@ -141,10 +150,13 @@ class S05ChannelCoordinator(DataUpdateCoordinator):
         )
         self._hub = hub
 
-    async def _async_update_data(self):
+    #async 
+    def _async_update_data(self):
         try:
-            async with async_timeout.timeout(self._hub.coordinator_timeout):
-                return await self._refresh_s05channel_data_with_retry(
+            #async
+            with async_timeout.timeout(self._hub.coordinator_timeout):
+                #return await
+                return self._refresh_s05channel_data_with_retry(
                     ex_type=DataUpdateFailed,
                     limit=RetrySettings.Limit,
                     wait_ms=RetrySettings.Time,
@@ -157,7 +169,8 @@ class S05ChannelCoordinator(DataUpdateCoordinator):
         except DataUpdateFailed as e:
             raise UpdateFailed(f"{e}")
 
-    async def _refresh_s05channel_data_with_retry(
+    #async 
+    def _refresh_s05channel_data_with_retry(
         self,
         ex_type=Exception,
         limit=0,
@@ -169,7 +182,8 @@ class S05ChannelCoordinator(DataUpdateCoordinator):
         attempt = 1
         while True:
             try:
-                return await self._hub.async_refresh_s05channel_data()
+                #return await self._hub.async_refresh_s05channel_data()
+                return self._hub.async_refresh_s05channel_data()
             except Exception as ex:
                 if not isinstance(ex, ex_type):
                     raise ex
@@ -183,5 +197,6 @@ class S05ChannelCoordinator(DataUpdateCoordinator):
                 _LOGGER.debug(
                     f"Waiting {wait_ms} ms before data refresh attempt #{attempt}"
                 )
-                await asyncio.sleep(wait_ms / 1000)
+                #await 
+                asyncio.sleep(wait_ms / 1000)
                 wait_ms *= wait_ratio
