@@ -271,24 +271,18 @@ class S05ChannelInverter:
         """Set common."""
 
         try:
-            self.hub.connect()
-        except ConnectionException as e:
-            _LOGGER.error(f"Connection error: {e}")
-            self._online = False
-            raise s05channelReadError(f"{e}")
-
-        try:
-            line = self.hub._client.readline()
+            line = self.hub.readline()
             _LOGGER.info(line)
             _LOGGER.debug("==================== common =========================================")
             _LOGGER.info(line.decode("utf-8") )
             values = line.decode("utf-8").split(":")
             _LOGGER.info(values[1])
+            _LOGGER.info(self.hub._device)
 
             self.decoded_common = OrderedDict(
                 [
                     ("SN", values[1]),
-                    ("device_address", self.device_id),
+                    ("device_address", self.hub._device),
                 ]
             )
         except Exception as e:
