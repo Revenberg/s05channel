@@ -350,4 +350,4 @@ class S05ChannelInverter:
     def device_info(self) -> Optional[dict[str, Any]]:
         """device_info."""
 
-        return self._device_info
+        return self._device_info-
