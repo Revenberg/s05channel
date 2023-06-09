@@ -84,7 +84,7 @@ class S05ChannelMultiHub:
         self.initalized = False
         self._online = False
 
-    #async 
+    #async
     def _async_init_s05channel(self) -> None:
         """Async init s05channel."""
 
@@ -92,7 +92,7 @@ class S05ChannelMultiHub:
 
         try:
             new_inverter = S05ChannelInverter(inverter_unit_id, self)
-            #await 
+            #await
             self._hass.async_add_executor_job(new_inverter.init_device)
             self.inverters.append(new_inverter)
 
@@ -107,7 +107,7 @@ class S05ChannelMultiHub:
 
         try:
             for inverter in self.inverters:
-                #await 
+                #await
                 self._hass.async_add_executor_job(inverter.read_s05channel_data)
 
         except s05channelReadError as e:
@@ -124,7 +124,7 @@ class S05ChannelMultiHub:
 
         self.initalized = True
 
-    #async 
+    #async
     def async_refresh_s05channel_data(self, _now: Optional[int] = None) -> bool:
         """async_refresh_s05channel_data."""
         if not self.is_socket_open():
@@ -181,7 +181,7 @@ class S05ChannelMultiHub:
         _LOGGER.debug(f"coordinator timeout is {self._coordinator_timeout}")
         return self._coordinator_timeout
 
-    #async 
+    #async
     def connect(self) -> None:
         """Connect s05channel client."""
         _LOGGER.debug("connect")
@@ -216,7 +216,7 @@ class S05ChannelMultiHub:
 
         return True
 
-    #async 
+    #async
     def shutdown(self) -> None:
         """Shut down the hub."""
         self._online = False
