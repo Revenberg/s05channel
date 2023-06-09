@@ -88,13 +88,17 @@ class S05ChannelMultiHub:
     async def _async_init_s05channel(self) -> None:
         """Async init s05channel."""
 
-        _LOGGER.debug("_async_init_s05channel")
+        _LOGGER.debug("_async_init_s05channel 1")
         inverter_unit_id = 1
 
         try:
+            _LOGGER.debug("_async_init_s05channel 2")
             new_inverter = S05ChannelInverter(inverter_unit_id, self)
+            _LOGGER.debug("_async_init_s05channel 3")
             await self._hass.async_add_executor_job(new_inverter.init_device)
+            _LOGGER.debug("_async_init_s05channel 4")
             self.inverters.append(new_inverter)
+            _LOGGER.debug("_async_init_s05channel 5")
 
         except s05channelReadError as e:
             _LOGGER.debug("---------------1- 2 - -------------------------")
