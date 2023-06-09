@@ -189,15 +189,9 @@ class S05ChannelMultiHub:
                   stopbits=serial.STOPBITS_ONE
             )
 
-    async def readline(self) -> str:
+    def readline(self):
         """Readline."""
-
-        _LOGGER.debug("readline")
-        await self.connect()
-
-        line = self._client.readline()
-        _LOGGER.debug(line)
-        return line
+        self._client.readline()
 
     def is_socket_open(self) -> bool:
         """Check s05channel client connection status."""
@@ -214,6 +208,7 @@ class S05ChannelMultiHub:
 class S05ChannelInverter:
     """S05ChannelInverter."""
 
+    _delta_energy = 0
     def __init__(self, device_id: int, hub: S05ChannelMultiHub) -> None:
         """Init."""
 
@@ -224,6 +219,7 @@ class S05ChannelInverter:
         self.has_parent = False
         self.global_power_control = None
         self.manufacturer = "S05Channel"
+        self._delta_energy = 0
 
     def init_device(self) -> None:
         """init_device."""
@@ -239,7 +235,7 @@ class S05ChannelInverter:
         self.serial = self.decoded_common["SN"]
         _LOGGER.debug("------------------22----------------------------------------------------")
         self.device_address = f"{self.hub._device}"
-        _LOGGER.debug("------------------334----------------------------------------------------")
+        _LOGGER.debug("------------------33----------------------------------------------------")
 
         h = self.hub._device.replace("/", "_")
         self.uid_base = f"{self.hub.hub_id.capitalize()} I{h}"
@@ -250,7 +246,7 @@ class S05ChannelInverter:
             "identifiers": {(DOMAIN, int(self.decoded_common["SN"]))},
             "name": self.device_address,
             "sn": self.decoded_common["SN"],
-            "device_address": self.hub._device,
+            "device_address": self.device_id,
             "manufacturer": "S05Channel",
             "model": self.model,
         }
@@ -259,24 +255,28 @@ class S05ChannelInverter:
         """Set common."""
 
         try:
-            _LOGGER.debug("==================== 10common =========================================")
-            _LOGGER.info(self.hub)
-            line = self.hub.readline()
+            self.hub.connect()
+        except ConnectionException as e:
+            _LOGGER.error(f"Connection error: {e}")
+            self._online = False
+            raise s05channelReadError(f"{e}")
+
+        try:
+            line = self.hub._client.readline()
             _LOGGER.info(line)
-            _LOGGER.debug("==================== 11common =========================================")
+            _LOGGER.debug("==================== common =========================================")
             _LOGGER.info(line.decode("utf-8") )
-            _LOGGER.debug("==================== 12common =========================================")
             values = line.decode("utf-8").split(":")
             _LOGGER.info(values[1])
 
             self.decoded_common = OrderedDict(
                 [
                     ("SN", values[1]),
-                    ("device_address", self.hub._device),
+                    ("device_address", self.device_id),
                 ]
             )
         except Exception as e:
-            _LOGGER.debug("==================== common Exception 13=========================================")
+            _LOGGER.debug("==================== common Exception 1=========================================")
             _LOGGER.error(f'exception: {e}')
 
     def read_s05channel_data(self) -> None:
@@ -291,7 +291,7 @@ class S05ChannelInverter:
             raise s05channelReadError(f"{e}")
 
         try:
-            line = self.hub.readline()
+            line = self.hub._client.readline()
             _LOGGER.info(line)
 
             if (line != ""):
@@ -309,12 +309,12 @@ class S05ChannelInverter:
                 self.decoded_model = OrderedDict(
                     [
                         ("status", "Running"),
-                        ("SN", int(values[1])),
-                        ("p1", int(values[6])),
-                        ("p2", int(values[9])),
-                        ("p3", int(values[11])),
-                        ("p4", int(values[15])),
-                        ("p5", int(values[18])),
+                        ("SN", values[1]),
+                        ("p1", values[6]),
+                        ("p2", values[9]),
+                        ("p3", values[11]),
+                        ("p4", values[15]),
+                        ("p5", values[18]),
 #                        ("device_address", F"overbodig {self.device_address}"),
                     ]
                 )
@@ -350,4 +350,4 @@ class S05ChannelInverter:
     def device_info(self) -> Optional[dict[str, Any]]:
         """device_info."""
 
-        return self._device_info-
+        return self._device_info
