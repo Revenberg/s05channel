@@ -31,7 +31,7 @@ PLATFORMS: list[str] = [
 ]
 
 
-#async 
+#async
 def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up an Energy Meter."""
     entry_updates: dict[str, Any] = {}
@@ -63,10 +63,10 @@ def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         "coordinator": coordinator,
     }
 
-    #await 
+    #await
     coordinator.async_config_entry_first_refresh()
 
-    #await 
+    #await
     hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
     entry.async_on_unload(entry.add_update_listener(async_reload_entry))
@@ -74,14 +74,14 @@ def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return True
 
 
-#async 
+#async
 def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Unload a config entry."""
     s05channel_hub = hass.data[DOMAIN][entry.entry_id]["hub"]
-    #await 
+    #await
     s05channel_hub.shutdown()
 
-    #unload_ok = await 
+    #unload_ok = await
     unload_ok = hass.config_entries.async_unload_platforms(entry, PLATFORMS)
     if unload_ok:
         hass.data[DOMAIN].pop(entry.entry_id)
@@ -89,14 +89,14 @@ def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     return unload_ok
 
 
-#async 
+#async
 def async_reload_entry(hass: HomeAssistant, entry: ConfigEntry) -> None:
     """Handle an options update."""
-    #await 
+    #await
     hass.config_entries.async_reload(entry.entry_id)
 
 
-#async 
+#async
 def async_remove_config_entry_device(
     hass: HomeAssistant, config_entry: ConfigEntry, device_entry: DeviceEntry
 ) -> bool:
@@ -150,7 +150,7 @@ class S05ChannelCoordinator(DataUpdateCoordinator):
         )
         self._hub = hub
 
-    #async 
+    #async
     def _async_update_data(self):
         try:
             #async
@@ -169,7 +169,7 @@ class S05ChannelCoordinator(DataUpdateCoordinator):
         except DataUpdateFailed as e:
             raise UpdateFailed(f"{e}")
 
-    #async 
+    #async
     def _refresh_s05channel_data_with_retry(
         self,
         ex_type=Exception,
@@ -197,6 +197,6 @@ class S05ChannelCoordinator(DataUpdateCoordinator):
                 _LOGGER.debug(
                     f"Waiting {wait_ms} ms before data refresh attempt #{attempt}"
                 )
-                #await 
+                #await
                 asyncio.sleep(wait_ms / 1000)
                 wait_ms *= wait_ratio
