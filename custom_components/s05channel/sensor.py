@@ -56,9 +56,11 @@ async def async_setup_entry(
 ) -> None:
     """async_setup_entry."""
 
-    _LOGGER.debug("async_setup_entry")
+    _LOGGER.debug("async_setup_entry 1")
     hub = hass.data[DOMAIN][config_entry.entry_id]["hub"]
+    _LOGGER.debug("async_setup_entry 2")
     coordinator = hass.data[DOMAIN][config_entry.entry_id]["coordinator"]
+    _LOGGER.debug("async_setup_entry 3")
 
     entities = []
 
@@ -126,6 +128,7 @@ class S05ChannelSensorBase(CoordinatorEntity, SensorEntity):
 class S05ChannelDevice(S05ChannelSensorBase):
     """S05ChannelDevice."""
 
+    _LOGGER.debug("S05ChannelDevice")
     entity_category = EntityCategory.DIAGNOSTIC
 
     def __init__(self, platform, config_entry, coordinator):

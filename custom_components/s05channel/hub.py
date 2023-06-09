@@ -190,7 +190,6 @@ class S05ChannelMultiHub:
                   stopbits=serial.STOPBITS_ONE
             )
 
-
     @property
     async def readline(self) -> str:
         """Readline."""
@@ -218,7 +217,7 @@ class S05ChannelMultiHub:
 class S05ChannelInverter:
     """S05ChannelInverter."""
 
-    _delta_energy = 0
+#    _delta_energy = 0
     def __init__(self, device_id: int, hub: S05ChannelMultiHub) -> None:
         """Init."""
 
@@ -230,7 +229,7 @@ class S05ChannelInverter:
         self.has_parent = False
         self.global_power_control = None
         self.manufacturer = "S05Channel"
-        self._delta_energy = 0
+ #       self._delta_energy = 0
 
     def init_device(self) -> None:
         """init_device."""
