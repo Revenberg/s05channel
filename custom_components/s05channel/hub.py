@@ -270,7 +270,10 @@ class S05ChannelInverter:
     async def read_s05channel_data_common(self) -> None:
         """Set common."""
 
+        _LOGGER.debug("==================== read_s05channel_data_common =========================================")
+            
         try:
+            _LOGGER.debug("==================== read =========================================")
             line = await self.hub.readline()
             _LOGGER.info(line)
             _LOGGER.debug("==================== common =========================================")
