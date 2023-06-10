@@ -305,7 +305,7 @@ class S05ChannelInverter:
 
         try:
             _LOGGER.debug("===================== read_s05channel_data 1 ========================================")
-            line = self.hub._client.readline
+            line = self.hub.readline
             _LOGGER.debug("===================== read_s05channel_data 2 ========================================")
             _LOGGER.info(line)
 
