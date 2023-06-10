@@ -285,7 +285,7 @@ class S05ChannelInverter:
             line = self.hub.readline()
             _LOGGER.info(line)
             _LOGGER.debug("==================== common =========================================")
-            values = split(":")
+            values = line.split(":")
             _LOGGER.info(values[1])
             _LOGGER.info(self.hub._device)
 
