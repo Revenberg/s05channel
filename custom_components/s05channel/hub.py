@@ -311,7 +311,9 @@ class S05ChannelInverter:
 
             if (line != ""):
                 _LOGGER.debug("===================== read_s05channel_data 3 ========================================")
+                _LOGGER.info(line)
                 values = line.split(":")
+                _LOGGER.debug("===================== read_s05channel_data 5 ========================================")
                 _LOGGER.info(values[1])
                 _LOGGER.info(values[6])
                 _LOGGER.info(values[9])
