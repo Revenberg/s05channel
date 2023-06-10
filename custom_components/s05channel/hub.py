@@ -200,11 +200,17 @@ class S05ChannelMultiHub:
     def readline(self) -> str:
         """Readline."""
 
-        _LOGGER.debug("readline")
+        _LOGGER.debug("readline 1")
+        _LOGGER.debug(self._client)
+
         if self._client is None:
             self.connect()
 
-        return self._client.readline()
+        _LOGGER.debug("readline 2")
+        line = self._client.readline()
+        _LOGGER.debug(line)
+        _LOGGER.debug("readline 3")
+        return line
 
 #    def is_socket_open(self) -> bool:
 #        """Check s05channel client connection status."""
