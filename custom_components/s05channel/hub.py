@@ -301,21 +301,16 @@ class S05ChannelInverter:
 
     def read_s05channel_data(self) -> None:
         """Read data."""
-        # _LOGGER.debug("read_s05channel_data")
+        _LOGGER.debug("read_s05channel_data 0")
 
         try:
-            self.hub.connect()
-        except ConnectionException as e:
-            _LOGGER.error(f"Connection error: {e}")
-            self._online = False
-            raise s05channelReadError(f"{e}")
-
-        try:
+            _LOGGER.debug("===================== read_s05channel_data 1 ========================================")
             line = self.hub._client.readline
+            _LOGGER.debug("===================== read_s05channel_data 2 ========================================")
             _LOGGER.info(line)
 
             if (line != ""):
-                _LOGGER.debug("===================== read_s05channel_data ========================================")
+                _LOGGER.debug("===================== read_s05channel_data 3 ========================================")
                 values = line.split(":")
                 _LOGGER.info(values[1])
                 _LOGGER.info(values[6])

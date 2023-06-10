@@ -65,15 +65,25 @@ async def async_setup_entry(
     entities = []
 
     for inverter in hub.inverters:
+        _LOGGER.debug("entities 1")
         entities.append(S05ChannelDevice(inverter, config_entry, coordinator))
+        _LOGGER.debug("entities 2")
         entities.append(S05ChannelSN(inverter, config_entry, coordinator))
+        _LOGGER.debug("entities 3")
         entities.append(S05ChannelPath(inverter, config_entry, coordinator))
+        _LOGGER.debug("entities 4")
         entities.append(S05ChannelStatus(inverter, config_entry, coordinator))
+        _LOGGER.debug("entities 5")
         #entities.append(StatusVendor(inverter, config_entry, coordinator))
+        _LOGGER.debug("entities 6")
         entities.append(S05ChannelPort(inverter, config_entry, coordinator, "1"))
+        _LOGGER.debug("entities 7")
         entities.append(S05ChannelPort(inverter, config_entry, coordinator, "2"))
+        _LOGGER.debug("entities 8")
         entities.append(S05ChannelPort(inverter, config_entry, coordinator, "3"))
+        _LOGGER.debug("entities 9")
         entities.append(S05ChannelPort(inverter, config_entry, coordinator, "4"))
+        _LOGGER.debug("entities 10")
         entities.append(S05ChannelPort(inverter, config_entry, coordinator, "5"))
 
     _LOGGER.debug(entities)
