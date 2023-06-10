@@ -131,7 +131,7 @@ class S05ChannelMultiHub:
         """async_refresh_s05channel_data."""
 
         _LOGGER.debug("async_refresh_s05channel_data")
-        await self.connect()
+        self.connect()
 
         if not self.initalized:
             try:
@@ -181,7 +181,7 @@ class S05ChannelMultiHub:
         _LOGGER.debug(f"coordinator timeout is {self._coordinator_timeout}")
         return self._coordinator_timeout
 
-    async def connect(self) -> None:
+    def connect(self) -> None:
         """Connect s05channel client."""
         _LOGGER.debug("connect 1")
         _LOGGER.debug(self._device)
@@ -197,14 +197,14 @@ class S05ChannelMultiHub:
             )
 
     @property
-    async def readline(self) -> str:
+    def readline(self) -> str:
         """Readline."""
 
         _LOGGER.debug("readline")
         if self._client is None:
-            await self.connect()
+            self.connect()
 
-        return await self._client.readline()
+        return self._client.readline()
 
 #    def is_socket_open(self) -> bool:
 #        """Check s05channel client connection status."""
@@ -267,14 +267,14 @@ class S05ChannelInverter:
             "model": self.model,
         }
 
-    async def read_s05channel_data_common(self) -> None:
+    def read_s05channel_data_common(self) -> None:
         """Set common."""
 
         _LOGGER.debug("==================== read_s05channel_data_common =========================================")
             
         try:
             _LOGGER.debug("==================== read =========================================")
-            line = await self.hub.readline()
+            line = self.hub.readline()
             _LOGGER.info(line)
             _LOGGER.debug("==================== common =========================================")
             _LOGGER.info(line.decode("utf-8") )
