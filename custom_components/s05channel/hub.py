@@ -271,7 +271,7 @@ class S05ChannelInverter:
         """Set common."""
 
         _LOGGER.debug("==================== read_s05channel_data_common =========================================")
-            
+
         try:
             _LOGGER.debug("==================== read =========================================")
             line = self.hub.readline()
