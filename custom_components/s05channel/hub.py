@@ -210,6 +210,8 @@ class S05ChannelMultiHub:
         line = self._client.readline()
         _LOGGER.debug(line)
         _LOGGER.debug("readline 3")
+        line = line.decode("utf-8")
+        _LOGGER.debug("readline 4")
         return line
 
 #    def is_socket_open(self) -> bool:
@@ -283,8 +285,7 @@ class S05ChannelInverter:
             line = self.hub.readline()
             _LOGGER.info(line)
             _LOGGER.debug("==================== common =========================================")
-            _LOGGER.info(line.decode("utf-8") )
-            values = line.decode("utf-8").split(":")
+            values = split(":")
             _LOGGER.info(values[1])
             _LOGGER.info(self.hub._device)
 
@@ -315,8 +316,7 @@ class S05ChannelInverter:
 
             if (line != ""):
                 _LOGGER.debug("===================== read_s05channel_data ========================================")
-                _LOGGER.info(line.decode("utf-8") )
-                values = line.decode("utf-8").split(":")
+                values = split(":")
                 _LOGGER.info(values[1])
                 _LOGGER.info(values[6])
                 _LOGGER.info(values[9])
