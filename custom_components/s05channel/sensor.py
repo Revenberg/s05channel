@@ -271,10 +271,12 @@ class S05ChannelPort(S05ChannelSensorBase):
     def name(self) -> str:
         """name."""
 
+        _LOGGER.debug("-------------")
+        _LOGGER.debug(self._platform.name)
         if self._port is None:
-            return f"{self._platform.name} Port"
+            return "S05Channel"
         else:
-            return f"{self._platform.name} Port {self._port.upper()}"
+            return f"S05Channel Port {self._port.upper()}"
 
     @property
     def native_value(self):
