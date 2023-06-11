@@ -162,7 +162,7 @@ class S05ChannelDevice(S05ChannelSensorBase):
     def native_value(self):
         """native_value."""
 
-        return self._platform.model
+        return f"{self._platform.model} {self._platform.hub.name}"
 
     @property
     def extra_state_attributes(self):
@@ -203,7 +203,7 @@ class S05ChannelSN(S05ChannelSensorBase):
     def name(self) -> str:
         """Name."""
 
-        return "Serial number"
+        return f"Serial number {self._platform.hub.name}"
 
     @property
     def native_value(self):
@@ -230,7 +230,7 @@ class S05ChannelPath(S05ChannelSensorBase):
     def name(self) -> str:
         """Name."""
 
-        return "Channel Path"
+        return f"Channel Path {self._platform.hub.name}"
 
     @property
     def native_value(self):
@@ -271,13 +271,10 @@ class S05ChannelPort(S05ChannelSensorBase):
     def name(self) -> str:
         """name."""
 
-        _LOGGER.debug("-------------")
-        _LOGGER.debug(self._platform.hub.name)
-
         if self._port is None:
-            return "S05Channel"
+            return f"{self._platform.hub.name}"
         else:
-            return f"S05Channel Port {self._port.upper()}"
+            return f"{self._platform.hub.name} Port {self._port.upper()}"
 
     @property
     def native_value(self):
@@ -314,7 +311,7 @@ class S05ChannelStatusSensor(S05ChannelSensorBase):
     def name(self) -> str:
         """Name."""
 
-        return "Status"
+        return f"Status {self._platform.hub.name}"
 
     @property
     def native_value(self):
