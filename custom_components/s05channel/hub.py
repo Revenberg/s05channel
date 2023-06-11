@@ -96,6 +96,8 @@ class S05ChannelMultiHub:
         _LOGGER.debug("Initialize the s05channel hub")
         _LOGGER.debug(name)
         _LOGGER.debug(device)
+        _LOGGER.debug(self)
+        _LOGGER.debug(hass)
 
     async def _async_init_s05channel(self) -> None:
         """Async init s05channel."""
