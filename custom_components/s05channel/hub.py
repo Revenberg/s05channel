@@ -66,10 +66,10 @@ class S05ChannelMultiHub:
     count = 0
 
     @classmethod
-    def incr(self):
+    def incr(self) -> int:
         self.count += 1
         return self.count
-    
+
     def __init__(
         self,
         hass: HomeAssistant,
@@ -97,10 +97,11 @@ class S05ChannelMultiHub:
         """Async init s05channel."""
 
         _LOGGER.debug("_async_init_s05channel 1")
+        inverter_unit_id = self.incr()
 
         try:
             _LOGGER.debug("_async_init_s05channel 2")
-            new_inverter = S05ChannelInverter(self.incr(), self)
+            new_inverter = S05ChannelInverter(inverter_unit_id, self)
             _LOGGER.debug("_async_init_s05channel 3")
             await self._hass.async_add_executor_job(new_inverter.init_device)
             _LOGGER.debug("_async_init_s05channel 4")
