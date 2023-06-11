@@ -9,6 +9,7 @@ from homeassistant.core import HomeAssistant
 
 from .const import DOMAIN
 import serial
+import itertools
 
 _LOGGER = logging.getLogger(__name__)
 _LOGGER.setLevel(logging.DEBUG)
@@ -62,6 +63,8 @@ class DeviceInvalid(S05ChannelException):
 class S05ChannelMultiHub:
     """S05ChannelMultiHub."""
 
+    newid = itertools.count().next
+    
     def __init__(
         self,
         hass: HomeAssistant,
@@ -89,7 +92,7 @@ class S05ChannelMultiHub:
         """Async init s05channel."""
 
         _LOGGER.debug("_async_init_s05channel 1")
-        inverter_unit_id = 1
+        inverter_unit_id = S05ChannelMultiHub.newid()
 
         try:
             _LOGGER.debug("_async_init_s05channel 2")
