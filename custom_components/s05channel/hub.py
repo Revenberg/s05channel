@@ -63,7 +63,7 @@ class DeviceInvalid(S05ChannelException):
 class S05ChannelMultiHub:
     """S05ChannelMultiHub."""
 
-    newid = itertools.count().next
+    newid = itertools.count()
 
     def __init__(
         self,
@@ -92,7 +92,7 @@ class S05ChannelMultiHub:
         """Async init s05channel."""
 
         _LOGGER.debug("_async_init_s05channel 1")
-        inverter_unit_id = S05ChannelMultiHub.newid()
+        inverter_unit_id = next(S05ChannelMultiHub)
 
         try:
             _LOGGER.debug("_async_init_s05channel 2")
