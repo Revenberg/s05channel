@@ -272,7 +272,7 @@ class S05ChannelPort(S05ChannelSensorBase):
         """name."""
 
         _LOGGER.debug("-------------")
-        _LOGGER.debug(self._platform.name)
+        _LOGGER.debug(self._platform.hub.name)
         if self._port is None:
             return "S05Channel"
         else:
