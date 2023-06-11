@@ -32,7 +32,11 @@ PLATFORMS: list[str] = [
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up an Energy Meter."""
+    """Set up an S0 meter."""
+
+    _LOGGER.debug( "!!!!!!!! async_setup_entry !!!!!!!!!!!!!!" )
+    _LOGGER.debug(  entry.data )
+
     entry_updates: dict[str, Any] = {}
     if CONF_SCAN_INTERVAL in entry.data:
         data = {**entry.data}
