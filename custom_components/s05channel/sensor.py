@@ -272,9 +272,9 @@ class S05ChannelPort(S05ChannelSensorBase):
         """name."""
 
         if self._port is None:
-            return "S05Channel"
+            return f"{self._platform.name} Port"
         else:
-            return f"S05Channel Port {self._port.upper()}"
+            return f"{self._platform.name} Port {self._port.upper()}"
 
     @property
     def native_value(self):
