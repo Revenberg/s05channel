@@ -231,7 +231,7 @@ class S05ChannelDeviceId(S05ChannelSensorBase):
     def name(self) -> str:
         """Name."""
 
-        return f"Device address {self._platform.hub.name}"
+        return f"Device id {self._platform.hub.name}"
 
     @property
     def native_value(self):

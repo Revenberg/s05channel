@@ -301,7 +301,8 @@ class S05ChannelInverter:
             self.decoded_common = OrderedDict(
                 [
                     ("SN", values[1]),
-                    ("device_id", self.hub._device),
+                    ("device_id", self.device_id),
+                    ("device_address", self.hub._device),
                 ]
             )
         except Exception as e:
