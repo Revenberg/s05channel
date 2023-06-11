@@ -69,6 +69,7 @@ async def async_setup_entry(
         entities.append(S05ChannelDevice(inverter, config_entry, coordinator))
         _LOGGER.debug("entities 2")
         entities.append(S05ChannelSN(inverter, config_entry, coordinator))
+        entities.append(S05ChannelDeviceId(inverter, config_entry, coordinator))
         _LOGGER.debug("entities 3")
         entities.append(S05ChannelPath(inverter, config_entry, coordinator))
         _LOGGER.debug("entities 4")
@@ -156,13 +157,13 @@ class S05ChannelDevice(S05ChannelSensorBase):
     def name(self) -> str:
         """Name."""
 
-        return "Device"
+        return f"Device {self._platform.hub.name}"
 
     @property
     def native_value(self):
         """native_value."""
 
-        return f"{self._platform.model} {self._platform.hub.name}"
+        return f"{self._platform.model}"
 
     @property
     def extra_state_attributes(self):
@@ -171,7 +172,7 @@ class S05ChannelDevice(S05ChannelSensorBase):
         attrs = {}
 
         _LOGGER.debug("native_value ...2...")
-        attrs["device_id"] = self._platform.device_address
+        attrs["device_id"] = self._platform.device_id
         attrs["manufacturer"] = self._platform.manufacturer
         attrs["device_address"] = self._platform.device_address
         attrs["model"] = self._platform.model
@@ -211,6 +212,33 @@ class S05ChannelSN(S05ChannelSensorBase):
 
         return self._platform.decoded_common["SN"]
 
+class S05ChannelDeviceId(S05ChannelSensorBase):
+    """S05Channel device id."""
+
+    entity_category = EntityCategory.DIAGNOSTIC
+
+    def __init__(self, platform, config_entry, coordinator):
+        """Initialize the sensor."""
+        super().__init__(platform, config_entry, coordinator)
+
+    @property
+    def unique_id(self) -> str:
+        """unique_id."""
+
+        return f"{self._platform.uid_base}_S05ChannelDeviceId"
+
+    @property
+    def name(self) -> str:
+        """Name."""
+
+        return f"Device address {self._platform.hub.name}"
+
+    @property
+    def native_value(self):
+        """native_value."""
+
+        return self._platform.decoded_common["device_id"]
+
 class S05ChannelPath(S05ChannelSensorBase):
     """S05ChannelPath."""
 
@@ -239,7 +267,7 @@ class S05ChannelPath(S05ChannelSensorBase):
         _LOGGER.debug("native_value ...1...")
         _LOGGER.debug(self._platform.decoded_common)
 
-        return self._platform.decoded_common["device_address"]
+        return self._platform.decoded_common["device_id"]
 
 class S05ChannelPort(S05ChannelSensorBase):
     """S05ChannelPort."""

@@ -9,7 +9,6 @@ from homeassistant.core import HomeAssistant
 
 from .const import DOMAIN
 import serial
-import itertools
 
 _LOGGER = logging.getLogger(__name__)
 _LOGGER.setLevel(logging.DEBUG)
@@ -67,6 +66,7 @@ class S05ChannelMultiHub:
 
     @classmethod
     def incr(self) -> int:
+        """Increment of class counter."""
         self.count += 1
         return self.count
 
@@ -278,7 +278,8 @@ class S05ChannelInverter:
             "identifiers": {(DOMAIN, int(self.decoded_common["SN"]))},
             "name": self.device_address,
             "sn": self.decoded_common["SN"],
-            "device_address": self.device_id,
+            "device_address": self.device_address,
+            "device_id": self.device_id,
             "manufacturer": "S05Channel",
             "model": self.model,
         }
@@ -300,7 +301,7 @@ class S05ChannelInverter:
             self.decoded_common = OrderedDict(
                 [
                     ("SN", values[1]),
-                    ("device_address", self.hub._device),
+                    ("device_id", self.hub._device),
                 ]
             )
         except Exception as e:
