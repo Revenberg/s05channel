@@ -64,7 +64,7 @@ class S05ChannelMultiHub:
     """S05ChannelMultiHub."""
 
     newid = itertools.count().next
-    
+
     def __init__(
         self,
         hass: HomeAssistant,
