@@ -69,6 +69,7 @@ async def async_setup_entry(
         entities.append(S05ChannelDevice(inverter, config_entry, coordinator))
         _LOGGER.debug("entities 2")
         entities.append(S05ChannelSN(inverter, config_entry, coordinator))
+        _LOGGER.debug("entities 2b")
         entities.append(S05ChannelDeviceId(inverter, config_entry, coordinator))
         _LOGGER.debug("entities 3")
         entities.append(S05ChannelPath(inverter, config_entry, coordinator))
@@ -231,12 +232,18 @@ class S05ChannelDeviceId(S05ChannelSensorBase):
     def name(self) -> str:
         """Name."""
 
+        _LOGGER.debug("native_value ...1?1...")
+        _LOGGER.debug("self._platform.hub.name")
+        _LOGGER.debug(self._platform.decoded_common)
         return f"Device id {self._platform.hub.name}"
 
     @property
     def native_value(self):
         """native_value."""
 
+        _LOGGER.debug("native_value ...2?2...")
+        _LOGGER.debug(self._platform.decoded_common)
+        _LOGGER.debug(self._platform.decoded_common["device_id"])
         return self._platform.decoded_common["device_id"]
 
 class S05ChannelPath(S05ChannelSensorBase):
@@ -267,7 +274,7 @@ class S05ChannelPath(S05ChannelSensorBase):
         _LOGGER.debug("native_value ...1...")
         _LOGGER.debug(self._platform.decoded_common)
 
-        return self._platform.decoded_common["device_id"]
+        return self._platform.decoded_common["device_address"]
 
 class S05ChannelPort(S05ChannelSensorBase):
     """S05ChannelPort."""

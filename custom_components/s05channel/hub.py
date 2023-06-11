@@ -298,6 +298,8 @@ class S05ChannelInverter:
             _LOGGER.info(values[1])
             _LOGGER.info(self.hub._device)
 
+            _LOGGER.debug("==================== common device_id =========================================")
+            _LOGGER.debug(self.device_id)
             self.decoded_common = OrderedDict(
                 [
                     ("SN", values[1]),
