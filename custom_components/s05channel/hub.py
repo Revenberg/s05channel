@@ -304,7 +304,7 @@ class S05ChannelInverter:
                 [
                     ("SN", values[1]),
                     ("device_id", self.device_id),
-                    ("device_address", self.hub._device),
+                    ("device_address", self.device_address),
                 ]
             )
         except Exception as e:
