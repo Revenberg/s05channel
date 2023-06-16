@@ -193,7 +193,6 @@ class S05ChannelDevice(S05ChannelSensorBase):
 
         return attrs
 
-
 class S05ChannelSN(S05ChannelSensorBase):
     """S05ChannelSN."""
 
