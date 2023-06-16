@@ -88,7 +88,11 @@ class S05ChannelMultiHub:
         self._lock = threading.Lock()
         self.inverters = []
         #self.meters = []
-
+        _LOGGER.debug(self._name)
+        _LOGGER.debug(self._device)
+        _LOGGER.debug(self._id)
+        _LOGGER.debug(self._client)
+        _LOGGER.debug("==S05ChannelMultiHub==")
 
         self.initalized = False
         self._online = False
@@ -223,6 +227,9 @@ class S05ChannelMultiHub:
 
         if self._client is None:
             self.connect()
+
+        _LOGGER.debug("readline 1a")
+        _LOGGER.debug(self._client)
 
         if self._client is None:
             decoded_model = OrderedDict(
