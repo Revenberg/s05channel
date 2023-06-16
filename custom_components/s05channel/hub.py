@@ -245,6 +245,7 @@ class S05ChannelMultiHub:
 
             else:
                 line = line.decode("utf-8")
+                line.replace("\r\n","")
                 values = line.split(":")
                 decoded_model = OrderedDict(
                     [
