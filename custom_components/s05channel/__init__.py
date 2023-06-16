@@ -57,6 +57,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             s = serial.Serial(port)
             s.close()
 
+            _LOGGER.debug( port )
+            _LOGGER.debug( entry.data[CONF_HOST] )
             if port == entry.data[CONF_HOST]:
                 s05channel_hub = S05ChannelMultiHub(
                     hass,
