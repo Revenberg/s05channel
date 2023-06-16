@@ -224,7 +224,7 @@ class S05ChannelMultiHub:
 
         if self._client is None:
             self.connect()
-            
+
         if self._client is None:
             decoded_model = OrderedDict(
                 [
