@@ -322,8 +322,12 @@ class S05ChannelPort(S05ChannelSensorBase):
 
         _LOGGER.debug("native_value")
         _LOGGER.debug(model_key)
+        _LOGGER.debug(self._platform.decoded_model["status"])
 
-        return self._platform.decoded_model[model_key]
+        if self._platform.decoded_model["status"] == "Running":
+            return self._platform.decoded_model[model_key]
+        else:
+            return None
 
 class S05ChannelStatusSensor(S05ChannelSensorBase):
     """S05ChannelStatusSensor."""
@@ -352,7 +356,7 @@ class S05ChannelStatusSensor(S05ChannelSensorBase):
     def native_value(self):
         """native_value."""
 
-        return "Active"
+        return self._platform.decoded_model["status"]
 
 class S05ChannelStatus(S05ChannelStatusSensor):
     """S05ChannelStatus."""
