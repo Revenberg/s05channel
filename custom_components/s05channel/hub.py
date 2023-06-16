@@ -354,7 +354,7 @@ class S05ChannelInverter:
             else:
                 self.decoded_common = OrderedDict(
                     [
-                        ("SN", "Unkown"),
+                        ("SN", 0),
                         ("device_id", self.device_id),
                         ("device_address", self.hub.name),
                         ("status", s0Info["status"]),
