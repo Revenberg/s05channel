@@ -226,7 +226,7 @@ class S05ChannelMultiHub:
         _LOGGER.debug(line)
         _LOGGER.debug("readline 3")
 
-        if line == "":
+        if line == b'':
             decoded_model = OrderedDict(
                     [
                         ("status", "Stopped"),
