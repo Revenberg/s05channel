@@ -85,7 +85,6 @@ class S05ChannelMultiHub:
         self._id = name.lower()
         self._coordinator_timeout = 30
         self._client = None
-        self._id = name.lower()
         self._lock = threading.Lock()
         self.inverters = []
         #self.meters = []
@@ -256,6 +255,7 @@ class S05ChannelMultiHub:
                         ("p3", values[11]),
                         ("p4", values[15]),
                         ("p5", values[18]),
+                        ("path", f"{self._device}" ),
                     ]
                 )
 
