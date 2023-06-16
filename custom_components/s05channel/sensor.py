@@ -68,6 +68,10 @@ async def async_setup_entry(
     _LOGGER.debug(hub._nr)
     _LOGGER.debug(hub.inverters)
     for inverter in hub.inverters:
+
+        _LOGGER.debug("entities 0")
+        _LOGGER.debug(inverter.device_id)
+
         _LOGGER.debug("entities 1")
         entities.append(S05ChannelDevice(inverter, config_entry, coordinator))
         _LOGGER.debug("entities 2")
