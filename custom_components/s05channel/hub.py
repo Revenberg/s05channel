@@ -202,14 +202,18 @@ class S05ChannelMultiHub:
         _LOGGER.debug(self._device)
         if self._client is None:
             BAUDRATE = 9600
-            self._client = serial.Serial(
-                  self._device,
-                  BAUDRATE,
-                  timeout=10,
-                  bytesize=serial.SEVENBITS,
-                  parity=serial.PARITY_EVEN,
-                  stopbits=serial.STOPBITS_ONE
-            )
+            try:
+                self._client = serial.Serial(
+                    self._device,
+                    BAUDRATE,
+                    timeout=10,
+                    bytesize=serial.SEVENBITS,
+                    parity=serial.PARITY_EVEN,
+                    stopbits=serial.STOPBITS_ONE
+                )
+            except Exception as e:
+                _LOGGER.debug("==================== connection Exception =========================================")
+                _LOGGER.error(f'exception: {e}')
 
     @property
     def readline(self) -> str:
@@ -220,33 +224,40 @@ class S05ChannelMultiHub:
 
         if self._client is None:
             self.connect()
-
-        _LOGGER.debug("readline 2")
-        line = self._client.readline()
-        _LOGGER.debug(line)
-        _LOGGER.debug("readline 3")
-
-        if line == b'':
-            decoded_model = OrderedDict(
-                    [
-                        ("status", "Stopped"),
-                    ]
-                )
-
-        else:
-            line = line.decode("utf-8")
-            values = line.split(":")
+            
+        if self._client is None:
             decoded_model = OrderedDict(
                 [
-                    ("status", "Running"),
-                    ("SN", values[1]),
-                    ("p1", values[6]),
-                    ("p2", values[9]),
-                    ("p3", values[11]),
-                    ("p4", values[15]),
-                    ("p5", values[18]),
+                    ("status", "Not available"),
                 ]
             )
+        else:
+            _LOGGER.debug("readline 2")
+            line = self._client.readline()
+            _LOGGER.debug(line)
+            _LOGGER.debug("readline 3")
+
+            if line == b'':
+                decoded_model = OrderedDict(
+                        [
+                            ("status", "Stopped"),
+                        ]
+                    )
+
+            else:
+                line = line.decode("utf-8")
+                values = line.split(":")
+                decoded_model = OrderedDict(
+                    [
+                        ("status", "Running"),
+                        ("SN", values[1]),
+                        ("p1", values[6]),
+                        ("p2", values[9]),
+                        ("p3", values[11]),
+                        ("p4", values[15]),
+                        ("p5", values[18]),
+                    ]
+                )
 
         _LOGGER.debug("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1")
         _LOGGER.info(decoded_model)
