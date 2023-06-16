@@ -88,7 +88,8 @@ class S05ChannelMultiHub:
         self._id = name.lower()
         self._lock = threading.Lock()
         self.inverters = []
-        self.meters = []
+        #self.meters = []
+        
 
         self.initalized = False
         self._online = False
@@ -226,7 +227,31 @@ class S05ChannelMultiHub:
         _LOGGER.debug("readline 3")
         line = line.decode("utf-8")
         _LOGGER.debug("readline 4")
-        return line
+        
+        if line == "":
+            decoded_model = OrderedDict(
+                    [
+                        ("status", "Stopped"),
+                    ]
+                )
+
+        else:
+            values = line.split(":")
+            decoded_model = OrderedDict(
+                [
+                    ("status", "Running"),
+                    ("SN", values[1]),
+                    ("p1", values[6]),
+                    ("p2", values[9]),
+                    ("p3", values[11]),
+                    ("p4", values[15]),
+                    ("p5", values[18]),
+                ]
+            )
+
+        _LOGGER.info(decoded_model)
+            
+        return decoded_model
 
 #    def is_socket_open(self) -> bool:
 #        """Check s05channel client connection status."""
@@ -297,23 +322,32 @@ class S05ChannelInverter:
 
         try:
             _LOGGER.debug("==================== read =========================================")
-            line = self.hub.readline
-            _LOGGER.info(line)
+            s0Info = self.hub.readline
             _LOGGER.debug("==================== common =========================================")
-            values = line.split(":")
-            _LOGGER.info(values[1])
             _LOGGER.info(self.hub._device)
 
             _LOGGER.debug("==================== common device_id =========================================")
             _LOGGER.debug(self.device_id)
             _LOGGER.debug(self.hub)
-            self.decoded_common = OrderedDict(
-                [
-                    ("SN", values[1]),
-                    ("device_id", self.device_id),
-                    ("device_address", self.hub.name),
-                ]
-            )
+            if s0Info["status"] == "Running":
+                self.decoded_common = OrderedDict(
+                    [
+                        ("SN", s0Info["SN"]),
+                        ("device_id", self.device_id),
+                        ("device_address", self.hub.name),
+                        ("status", s0Info["status"]),
+                    ]
+                )
+            else:
+                self.decoded_common = OrderedDict(
+                    [
+                        ("SN", s0Info["SN"]),
+                        ("device_id", self.device_id),
+                        ("device_address", self.hub.name),
+                        ("status", s0Info["status"]),
+                    ]
+                )
+
         except Exception as e:
             _LOGGER.debug("==================== common Exception 1=========================================")
             _LOGGER.error(f'exception: {e}')
@@ -324,46 +358,12 @@ class S05ChannelInverter:
 
         try:
             _LOGGER.debug("===================== read_s05channel_data 1 ========================================")
-            line = self.hub.readline
+            self.decoded_model = self.hub.readline
             _LOGGER.debug("===================== read_s05channel_data 2 ========================================")
-            _LOGGER.info(line)
-
-            if (line != ""):
-                _LOGGER.debug("===================== read_s05channel_data 3 ========================================")
-                _LOGGER.info(line)
-                values = line.split(":")
-                _LOGGER.debug("===================== read_s05channel_data 5 ========================================")
-                _LOGGER.info(values[1])
-                _LOGGER.info(values[6])
-                _LOGGER.info(values[9])
-                _LOGGER.info(values[12])
-                _LOGGER.info(values[15])
-                _LOGGER.info(values[18])
-                _LOGGER.info( values )
-
-                self.decoded_model = OrderedDict(
-                    [
-                        ("status", "Running"),
-                        ("SN", values[1]),
-                        ("p1", values[6]),
-                        ("p2", values[9]),
-                        ("p3", values[11]),
-                        ("p4", values[15]),
-                        ("p5", values[18]),
-#                        ("device_address", F"overbodig {self.device_address}"),
-                    ]
-                )
-
-                self.hub._online = True
-                _LOGGER.debug(f"Inverter: {self.decoded_model}")
-            else:
-                self.hub._online = False
-                self.decoded_model = OrderedDict(
-                    [
-                        ("status", "Stopped"),
-                    ]
-                )
-
+                
+            self.hub._online = self.decoded_model["status"] = "Running"
+            _LOGGER.debug(f"Inverter: {self.decoded_model}")
+            
         except Exception as e:
             _LOGGER.debug("==================== line Exception =========================================")
             _LOGGER.error(f'exception: {e}')
