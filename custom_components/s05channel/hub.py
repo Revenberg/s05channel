@@ -330,6 +330,7 @@ class S05ChannelInverter:
             _LOGGER.debug("==================== common device_id =========================================")
             _LOGGER.debug(self.device_id)
             _LOGGER.debug(self.hub)
+            _LOGGER.debug(s0Info)
             if s0Info["status"] == "Running":
                 self.decoded_common = OrderedDict(
                     [
@@ -342,7 +343,7 @@ class S05ChannelInverter:
             else:
                 self.decoded_common = OrderedDict(
                     [
-                        ("SN", s0Info["SN"]),
+                        ("SN", ""),
                         ("device_id", self.device_id),
                         ("device_address", self.hub.name),
                         ("status", s0Info["status"]),
