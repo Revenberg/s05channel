@@ -3,8 +3,10 @@ import asyncio
 import logging
 from datetime import timedelta
 from typing import Any
+import glob
 
 import async_timeout
+import serial
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     CONF_HOST,
@@ -48,29 +50,42 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if entry_updates:
         hass.config_entries.async_update_entry(entry, **entry_updates)
 
-    s05channel_hub = S05ChannelMultiHub(
-        hass,
-        entry.data[CONF_NAME],
-        entry.data[CONF_HOST]
-    )
+    ports = glob.glob('/dev/ttyACM[0-9]*')
+    _LOGGER.debug(  ports )
+    
+    for port in ports:
+        try:
+            s = serial.Serial(port)
+            s.close()
+            if port == CONF_HOST:
+                cont = True
 
-    coordinator = S05ChannelCoordinator(
-        hass,
-        s05channel_hub,
-        entry.options.get(CONF_SCAN_INTERVAL, ConfDefaultInt.SCAN_INTERVAL),
-    )
+            s05channel_hub = S05ChannelMultiHub(
+                hass,
+                entry.data[CONF_NAME],
+                entry.data[CONF_HOST]
+            )
 
-    hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN][entry.entry_id] = {
-        "hub": s05channel_hub,
-        "coordinator": coordinator,
-    }
+            coordinator = S05ChannelCoordinator(
+                hass,
+                s05channel_hub,
+                entry.options.get(CONF_SCAN_INTERVAL, ConfDefaultInt.SCAN_INTERVAL),
+            )
 
-    await coordinator.async_config_entry_first_refresh()
+            hass.data.setdefault(DOMAIN, {})
+            hass.data[DOMAIN][entry.entry_id] = {
+                "hub": s05channel_hub,
+                "coordinator": coordinator,
+            }
 
-    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+            await coordinator.async_config_entry_first_refresh()
 
-    entry.async_on_unload(entry.add_update_listener(async_reload_entry))
+            await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+
+            entry.async_on_unload(entry.add_update_listener(async_reload_entry))
+
+        except:
+            pass
 
     return True
 
