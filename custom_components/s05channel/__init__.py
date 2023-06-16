@@ -84,7 +84,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
                 entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
-        except:
+        except Exception:
             pass
 
     return True
