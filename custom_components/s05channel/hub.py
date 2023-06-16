@@ -225,7 +225,7 @@ class S05ChannelMultiHub:
         line = self._client.readline()
         _LOGGER.debug(line)
         _LOGGER.debug("readline 3")
-        
+
         if line == "":
             decoded_model = OrderedDict(
                     [
