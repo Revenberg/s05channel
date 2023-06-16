@@ -60,7 +60,8 @@ async def async_setup_entry(
     hub = hass.data[DOMAIN][config_entry.entry_id]["hub"]
     _LOGGER.debug("async_setup_entry 2")
     coordinator = hass.data[DOMAIN][config_entry.entry_id]["coordinator"]
-    _LOGGER.debug("async_setup_entry 3")
+    _LOGGER.debug("async_setup_entry 3 coordinator" )
+    _LOGGER.debug(coordinator)
 
     entities = []
 
