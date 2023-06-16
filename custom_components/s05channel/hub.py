@@ -225,9 +225,7 @@ class S05ChannelMultiHub:
         line = self._client.readline()
         _LOGGER.debug(line)
         _LOGGER.debug("readline 3")
-        line = line.decode("utf-8")
-        _LOGGER.debug("readline 4")
-
+        
         if line == "":
             decoded_model = OrderedDict(
                     [
@@ -236,6 +234,7 @@ class S05ChannelMultiHub:
                 )
 
         else:
+            line = line.decode("utf-8")
             values = line.split(":")
             decoded_model = OrderedDict(
                 [
@@ -249,7 +248,9 @@ class S05ChannelMultiHub:
                 ]
             )
 
+        _LOGGER.debug("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1")
         _LOGGER.info(decoded_model)
+        _LOGGER.debug("readline 4")
 
         return decoded_model
 
