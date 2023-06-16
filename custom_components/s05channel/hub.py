@@ -374,7 +374,7 @@ class S05ChannelInverter:
             self.decoded_model = self.hub.readline
             _LOGGER.debug("===================== read_s05channel_data 2 ========================================")
 
-            self.hub._online = self.decoded_model["status"] = "Running"
+            self.hub._online = (self.decoded_model["status"] == "Running")
             _LOGGER.debug(f"Inverter: {self.decoded_model}")
 
         except Exception as e:
