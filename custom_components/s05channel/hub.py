@@ -87,11 +87,14 @@ class S05ChannelMultiHub:
         self._client = None
         self._lock = threading.Lock()
         self.inverters = []
+        self._nr = self.incr()
         #self.meters = []
         _LOGGER.debug(self._name)
         _LOGGER.debug(self._device)
         _LOGGER.debug(self._id)
         _LOGGER.debug(self._client)
+        _LOGGER.debug(self._nr)
+        
         _LOGGER.debug("==S05ChannelMultiHub==")
 
         self.initalized = False
