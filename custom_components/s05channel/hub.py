@@ -89,7 +89,7 @@ class S05ChannelMultiHub:
         self._lock = threading.Lock()
         self.inverters = []
         #self.meters = []
-        
+
 
         self.initalized = False
         self._online = False
@@ -227,7 +227,7 @@ class S05ChannelMultiHub:
         _LOGGER.debug("readline 3")
         line = line.decode("utf-8")
         _LOGGER.debug("readline 4")
-        
+
         if line == "":
             decoded_model = OrderedDict(
                     [
@@ -250,7 +250,7 @@ class S05ChannelMultiHub:
             )
 
         _LOGGER.info(decoded_model)
-            
+
         return decoded_model
 
 #    def is_socket_open(self) -> bool:
@@ -360,10 +360,10 @@ class S05ChannelInverter:
             _LOGGER.debug("===================== read_s05channel_data 1 ========================================")
             self.decoded_model = self.hub.readline
             _LOGGER.debug("===================== read_s05channel_data 2 ========================================")
-                
+
             self.hub._online = self.decoded_model["status"] = "Running"
             _LOGGER.debug(f"Inverter: {self.decoded_model}")
-            
+
         except Exception as e:
             _LOGGER.debug("==================== line Exception =========================================")
             _LOGGER.error(f'exception: {e}')
