@@ -32,7 +32,6 @@ PLATFORMS: list[str] = [
     Platform.SENSOR,
 ]
 
-
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up an S0 meter."""
 
