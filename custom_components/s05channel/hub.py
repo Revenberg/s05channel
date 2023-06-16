@@ -94,7 +94,7 @@ class S05ChannelMultiHub:
         _LOGGER.debug(self._id)
         _LOGGER.debug(self._client)
         _LOGGER.debug(self._nr)
-        
+
         _LOGGER.debug("==S05ChannelMultiHub==")
 
         self.initalized = False

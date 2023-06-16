@@ -51,37 +51,35 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     ports = glob.glob('/dev/ttyACM[0-9]*')
     _LOGGER.debug(  ports )
-    
+
     for port in ports:
         try:
             s = serial.Serial(port)
             s.close()
             if port == CONF_HOST:
-                cont = True
+                s05channel_hub = S05ChannelMultiHub(
+                    hass,
+                    entry.data[CONF_NAME],
+                    entry.data[CONF_HOST]
+                )
 
-            s05channel_hub = S05ChannelMultiHub(
-                hass,
-                entry.data[CONF_NAME],
-                entry.data[CONF_HOST]
-            )
+                coordinator = S05ChannelCoordinator(
+                    hass,
+                    s05channel_hub,
+                    entry.options.get(CONF_SCAN_INTERVAL, ConfDefaultInt.SCAN_INTERVAL),
+                )
 
-            coordinator = S05ChannelCoordinator(
-                hass,
-                s05channel_hub,
-                entry.options.get(CONF_SCAN_INTERVAL, ConfDefaultInt.SCAN_INTERVAL),
-            )
+                hass.data.setdefault(DOMAIN, {})
+                hass.data[DOMAIN][entry.entry_id] = {
+                    "hub": s05channel_hub,
+                    "coordinator": coordinator,
+                }
 
-            hass.data.setdefault(DOMAIN, {})
-            hass.data[DOMAIN][entry.entry_id] = {
-                "hub": s05channel_hub,
-                "coordinator": coordinator,
-            }
+                await coordinator.async_config_entry_first_refresh()
 
-            await coordinator.async_config_entry_first_refresh()
+                await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
-            await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-
-            entry.async_on_unload(entry.add_update_listener(async_reload_entry))
+                entry.async_on_unload(entry.add_update_listener(async_reload_entry))
 
         except:
             pass
